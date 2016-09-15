@@ -16,18 +16,16 @@
 
 .title {
   min-width: 520px;
-  background-color: #130041 ;
   color: white;
 }
 
 .content {
   min-width: 520px;
-  background-color: #3DBDB6;
+  background-color: #fff;
 }
 
 .cardBackground {
   background-size: cover;
-  filter: brightness(1) contrast(150%);
   transition: filter 2s;
   position: absolute;
   top: 0;
@@ -37,16 +35,19 @@
 }
 
 .blueRadial {
-  background: radial-gradient(center, ellipse cover,  #3e56ee 0%,  #091668  85%);
+  background: radial-gradient(center, circle,  #3e56ee 0%,  #091668  85%);
+}
+
+.onyx {
+  background-color: #171717;
+}
+
+.ocean {
+  background: url('images/stars.jpg');
+  background-size: cover;
+  background-position: 0% 30%;
 }
 
 .card:hover {
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
-
-.card:hover .cardBackground {
-  filter: brightness(1.25) contrast(150%);
-}
-
-
-
