@@ -1,0 +1,30 @@
+@import 'common/typography';
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,800|Arvo:400,400i,700);
+
+/* General styles */
+
+body {
+  background-color: #6e6e6e;
+  margin: 0;
+}
+
+h2 {
+  font-family: var(--headingFont);
+  @apply --heading;
+  margin: 0;
+}
+
+h3 {
+  font-family: var(--headingFont);
+  font-style: italic;;
+  @apply --subHeading;
+  color: white;
+  margin: 0;
+}
+
+p {
+  color: black;
+  font-family: var(--bodyFont);
+  line-height: 24px;
+}

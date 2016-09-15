@@ -1,0 +1,35 @@
+:root {
+
+  --headingFont: 'Open Sans', sans-serif;
+  --bodyFont: 'Arvo', serif;
+
+  --fontSmall: 12px;
+  --fontMedium: 16px;
+  --fontLarge: 21px;
+  --fontHuge: 28px;
+
+  --subHeading {
+    font-size: 28px;
+    font-weight: bold;
+    font-smoothing: antialiased;
+  }
+
+  --heading {
+    font-size: 38px;
+    font-weight: bold;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  --normal {
+    font-size: 16px;
+    line-height: 24px;
+    font-smoothing: antialiased;
+  }
+
+  --small {
+    font-size: 12px;
+    line-height: 24px;
+    font-smoothing: antialiased;
+  }
+
+}

@@ -40,7 +40,7 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
-sequelize.sync({force: true}).then(() => {
+sequelize.sync().then(() => {
   console.log('Postgres Database synced with models');
 })
 .catch((err) => {

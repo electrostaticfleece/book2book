@@ -16,7 +16,7 @@ function formatAPIData(book, id) {
     authors: book.authors,
     categories: book.categories,
     description: book.description,
-    image: book.imageLinks ? book.imageLinks.thumbnail : null,
+    image: book.imageLinks ? book.imageLinks.thumbnail.replace('zoom=1', 'zoom=2') : null,
     isbn: book.industryIdentifiers ? book.industryIdentifiers[0].identifier : null,
     altId: id
   };

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
 import { getBook, clearResults, postBook } from 'actions/books';
 import { typing, clearTyping } from 'actions/input';
-import styles from 'css/main';
+import styles from 'css/components/addBook';
 import SearchForm from 'components/SearchForm';
 import SingleBook from 'containers/SingleBook'
 
