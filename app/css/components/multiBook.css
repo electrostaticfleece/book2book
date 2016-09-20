@@ -24,47 +24,68 @@
   position: relative;
 }
 
-.bookFilter {
+.filterLayer{
   height: 100%;
   top: 0%;
   width: 100%;
   position: absolute;
-  -webkit-transition: all 0.5s;
-  transition: all 0.5s;
+  -webkit-transition: all 0.75s;
+  transition: all 0.75s;
 }
 
-.bookFilter:hover {
+.fade, .bookFilter:hover {
   display: block;
   background-color: rgba(0, 0, 0, 0.75);
   z-index: 2;
 }
 
+.highlight:hover {
+  background-color: rgba(255,255,255,0.25);
+}
+
+/* Book Icons */
+
 .icon {
   position: absolute;
   opacity: 0;
   color: white;
-  -webkit-transition: all 0.5s;
-  transition: all 0.5s;
+  -webkit-transition: all 0.75s;
+  transition: all 0.75s;
 }
 
-.bookFilter:hover .icon {
+.filterLayer:hover .icon {
   cursor: pointer;
   opacity: 1;
 }
 
+.highlight .icon {
+  color: black;
+}
 
-.delete {
-  composes: fa delete fa-3x from '../common/icons.css';
+.single {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.double1 {
   top: 25%;
   left: 50%;
   transform: translate(-50%, -25%);
 }
 
-.view {
-  composes: fa view fa-3x from '../common/icons.css';
+.double2 {
   top: 75%;
   left: 50%;
   transform: translate(-50%, -75%);
+}
+
+.delete {
+  composes: fa delete fa-3x from '../common/icons.css';
+}
+
+.view {
+  composes: fa view fa-3x from '../common/icons.css';
 }
 
 .delete:hover {

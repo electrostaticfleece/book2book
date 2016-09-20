@@ -1,10 +1,21 @@
-/**
- * Routes for express app
- */
 import passport from 'passport';
 import { controllers, passport as passportConfig } from '../db';
 
+function saveSession(req, res) {
+  req.session.save((err) => {
+    if(err) {
+      console.log('Error: unable to save session before redirect');
+    } else {
+      res.redirect('/');
+    }
+  });
+};
+
 export default (app) => {
+
+  if(controllers && controllers.User){
+    app.get('/logout', controllers.User.logOut, saveSession);
+  }
 
   if (passportConfig && passportConfig.google) {
     // google auth
@@ -27,22 +38,13 @@ export default (app) => {
     app.get('/auth/google/callback',
       passport.authenticate('google', {
         failureRedirect: '/'
-      }), (req, res) =>
-        req.session.save((err) => {
-          if(err){
-            console.log('Error: unable to save session before redirect');
-          } else {
-            res.redirect('/')
-          }
-        })
-    );
-
-
+      }), saveSession);
   }
 
   if(controllers && controllers.Book) {
     app.post('/books', controllers.Book.addBook);
     app.delete('/books', controllers.Book.removeBook);
+    app.get('/books', controllers.Book.getAllBooks)
   }
 
 

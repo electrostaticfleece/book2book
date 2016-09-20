@@ -30,6 +30,10 @@ export default function(Models) {
 
   function removeBook(req, res) {
     const data = req.body;
+    if(authenticated(req.user, res)){
+      return null;
+    }
+
     sequelize.transaction((t) => {
 
       return Book.findOne({
@@ -91,10 +95,38 @@ export default function(Models) {
         });
     });
   };
+
+  function getAllBooks(req, res, next) {
+
+    Book.findAll({
+      where: {
+        available: {
+          gt: 0
+        }
+      } 
+    })
+    .then((books) => {
+      if(books) {
+        return res.status(200).send({
+          message: 'We have successfully retrieved your books',
+          books: books
+        })
+      } else {
+        return res.status(200).send({
+          message: 'There are no books currently in the database',
+          books: []
+        })
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({message: 'Your book could not be added to the database'})
+    });
+  };
   
   
   return {
     addBook,
-    removeBook
+    removeBook,
+    getAllBooks
   }
 }

@@ -84,12 +84,19 @@ export default function(Models) {
     throw new Error('The instance of user must be an object and contain a destroy property', '.server/db/controllers/users.js');
   }
 
+  function logOut(req, res , next) {
+    // Do email and password validation for the server
+    req.logout();
+    next()  
+  }
+
   return {
     findById,
     findOne,
     updateSettings,
     createUserWithToken,
     attachGoogleAccount,
-    deleteAccount
+    deleteAccount,
+    logOut
   }
 }

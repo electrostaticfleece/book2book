@@ -11,6 +11,11 @@ class MultiBook extends Component {
   constructor(props) {
     super(props);
     this.handleResize = this.handleResize.bind(this);
+    this.handleMouseEnter = this.handleMouseEnter.bind(this);
+    this.hanldeMouseLeave = this.handleMouseLeave.bind(this);
+    this.state = {
+      selected: null
+    }
   }
 
   componentDidMount() {
@@ -34,8 +39,22 @@ class MultiBook extends Component {
     changeMultiBookWidth(multiBookWidth);
   }
 
+  handleMouseEnter(id) {
+    const { highlight } = this.props;
+    if(highlight) {
+      this.setState({selected: id});
+    }
+  }
+
+  handleMouseLeave() {
+    const { highlight } = this.props;
+    if(highlight) {
+      this.setState({selected: null});
+    }
+  }
+
   segmentBooks(books, max) {
-    return books.reduce((prev, curr, i) => {
+    return (books || []).reduce((prev, curr, i) => {
       const toAdd = (i % max) ? prev.pop().concat(curr) : [curr];
       prev.push(toAdd);
       return prev;
@@ -49,7 +68,11 @@ class MultiBook extends Component {
 
     return this.segmentBooks(books, max).map((segment, i, arr) => {
       return (
-        <div key={i} className={cx({row: true})} style={{'marginLeft': margin, 'marginRight': margin}} >
+        <div 
+          key={i} 
+          className={cx({row: true})} 
+          style={{'marginLeft': margin, 'marginRight': margin}} 
+        >
           { this.mapBooksToRow(segment, bookSize, icons, dimensions) }
         </div>
       )
@@ -58,16 +81,30 @@ class MultiBook extends Component {
 
   mapBooksToRow(books, bookSize, icons, dimensions) {
     const { width, margin } = dimensions;
+    const { highlight } = this.props;
 
     return books.map((book) => {
       return (
-        <div key={book.altId} className={cx('book')} style={{'marginLeft': margin, 'marginRight': margin, width: width}}>
-          <div className={cx('bookWrap')}>
+        <div 
+          key={book.altId} 
+          className={cx('book')} 
+          style={{'marginLeft': margin, 'marginRight': margin, width: width}}
+        >
+          <div className={cx({ bookWrap: true} )}>
             <img 
               src={book.image ? (bookSize === 'small' ? book.image.replace('zoom=2', 'zoom=1') : book.image) : galaxy} 
               className = {cx('bookImg')}
             />
-            <div className={cx('bookFilter')}>
+            <div 
+              className={cx({
+                filterLayer: true,
+                bookFilter: !highlight, 
+                highlight: this.state.selected === book.altId, 
+                fade: this.state.selected && this.state.selected !== book.altId
+              })}
+              onMouseEnter = { (e) => this.handleMouseEnter(book.altId)}
+              onMouseLeave = { (e) => this.handleMouseLeave()}
+            >
               { this.mapIconsToBook(icons, book) }
             </div>
           </div>
@@ -77,9 +114,14 @@ class MultiBook extends Component {
   }
 
   mapIconsToBook(icons, book) {
-    return icons.map((icon, i) => {
+    return icons.map((icon, i, arr) => {
+      const iconClass = arr.length < 2 ? 'single' : 'double' + (i+1);
       return (
-        <i key={i} onClick={(e) => icon.func(book) } className={cx(icon.classes)}> </i>
+        <i 
+          key={i} 
+          onClick={(e) => icon.func(book) } 
+          className={cx({...icon.classes, [iconClass]: true})}> 
+        </i>
       );
     });
   }

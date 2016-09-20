@@ -1,0 +1,55 @@
+@import 'common/typography';
+
+.navigation {
+  background-color: rgba(0, 0, 0, 0.85);
+  margin: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 3;
+  height: 52px;
+}
+
+.linkList {
+  display: flex;
+  justify-content: flex-end;
+  list-style-type: none;
+  margin: 0;
+}
+
+.navLink {
+  display: block;
+  padding: 15px;
+  height: 22px;
+  text-decoration: none;
+  margin: 0 15px;
+  position: relative;
+}
+
+.navLink::after {
+  content: '';
+  left: 0;
+  bottom: 0;
+  display: block;
+  position: absolute;
+  height: 3px;
+  background-color: #01A9D5;
+  width: 0%;
+  transition: width 0.25s;
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+.linkName {
+  color: white;
+  font-family: var(--headingFont);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.navLink:hover .linkName, .selected .linkName {
+  color: #01A9D5;
+}

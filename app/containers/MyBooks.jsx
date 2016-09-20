@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
+import styles from 'css/components/myBooks';
 import { changeViewToSingle, deleteBook } from 'actions/books';
-import Card from 'components/Card';
 import MultiBook from 'components/MultiBook';
+
+const cx = classNames.bind(styles);
 
 class MyBooks extends Component {
   constructor(props) {
@@ -30,9 +32,9 @@ class MyBooks extends Component {
 
   render() {
     const { user: { books } } = this.props;
-    const dimensions = {width: 200, margin: 10};
+    const dimensions = {width: 200, margin: 20};
     return (
-      <div>
+      <div className={cx('myBooks')}>
         { books.length > 0 ? 
         <MultiBook 
           books = {books}

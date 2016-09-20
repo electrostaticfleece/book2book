@@ -4,8 +4,8 @@ import classNames from 'classnames/bind';
 import { getBook, changeBook, postBook } from 'actions/books';
 import { typing, clearTyping } from 'actions/input';
 import styles from 'css/components/addBook';
-import SearchForm from 'components/SearchForm';
-import SingleBook from 'components/SingleBook'
+import SearchForm from 'components/Search/SearchForm';
+import SingleBook from 'components/SingleBook/SingleBook'
 
 const cx = classNames.bind(styles);
 
@@ -15,11 +15,18 @@ class Add extends Component {
     this.mapIcons = this.mapIcons.bind(this);
   }
 
+  componentDidMount() {
+    //Incase we come from a page where the scroll bar is positioned
+    window.scrollTo(0, 0);
+  }
+
   mapIcons(condition) {
     /* 
      * A condition is passed through to the mapIcons function for our onClick 
      * event because we need the currentstate of the application. Otherwise, 
      * react does not recognize that the status of our search request has changed. 
+     *
+     * By injecting icons into the component allowing for greater control over properties. 
      */
     const { changeBook, postBook } = this.props;
     const icons = [ {

@@ -10,6 +10,7 @@ const data = (
       return [...state, ...action.payload.data];
     case types.GET_NEW_BOOK_SUCCESS:
     case types.VIEW_SINGLE_BOOK:
+    case types.GET_AVAILABLE_BOOKS_SUCCESS:
       return action.payload.data;
     default: 
       return state;
@@ -23,12 +24,14 @@ const requests = (
   switch(action.type) {
     case types.GET_BOOK_REQUEST:
     case types.POST_BOOK_REQUEST:
+    case types.GET_AVAILABLE_BOOKS_REQUEST:
       return {
         ...state, 
         status: 'Requested'
       };
     case types.GET_BOOK_FAILURE: 
     case types.POST_BOOK_FAILURE:
+    case types.GET_AVAILABLE_BOOKS_FAILURE:
       return {
         ...state, 
         status: 'Failed'
@@ -47,6 +50,13 @@ const requests = (
         ...state,
         status: 'Success',
         totalItems: 1,
+        data: data(state.data, action)
+      };
+    case types.GET_AVAILABLE_BOOKS_SUCCESS:
+      return {
+        ...state,
+        status: 'Success',
+        totalItems: action.payload.length,
         data: data(state.data, action)
       }
     case types.CLEAR_RESULTS: 
@@ -78,7 +88,14 @@ const search = (
       return {
         ...state,
         viewBook: requests(state.viewBook, action)
-      }
+      };
+    case types.GET_AVAILABLE_BOOKS_REQUEST:
+    case types.GET_AVAILABLE_BOOKS_SUCCESS:
+    case types.GET_AVAILABLE_BOOKS_FAILURE:
+      return {
+        ...state,
+        findBook: requests(state.findBook, action)
+      };
     default:
       return state;
   };

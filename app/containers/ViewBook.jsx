@@ -1,11 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
-import SingleBook from 'components/SingleBook';
+import SingleBook from 'components/SingleBook/SingleBook';
 
 class ViewBook extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    //Incase we come from a page where the scroll bar is positioned
+    window.scrollTo(0, 0);
   }
 
   render() {

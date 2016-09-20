@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames/bind';
-import SearchInput from 'components/Search/SearchInput';
+import SearchInput from 'components/SearchInput';
 import styles from 'css/components/searchForm';
 
 const cx = classNames.bind(styles);

@@ -10,10 +10,12 @@
   position: relative;
 }
 
+/* Remember to add in a media query for the heading */ 
+
 .heading {
   position: absolute;
-  top: 185px;
-  left: 80px;
+  top: 275px;
+  left: 55px;
   color: white;
 }
 
@@ -28,3 +30,19 @@
   width: 100%;
   height: 100%;
 }
+
+.bookView {
+  margin-top: -100px;
+  padding-bottom: 30px;
+}
+
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: 50px;
+  }
+
+  .hero p {
+    font-size: 20px;
+  }
+}
+

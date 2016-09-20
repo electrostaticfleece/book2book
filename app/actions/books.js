@@ -114,6 +114,30 @@ export function postBookFailure(data) {
   };
 };
 
+//GET AVAILABLE BOOKS ACTION CREATORS
+
+export function getAvailableBooksRequest() {
+  return {
+    type: types.GET_AVAILABLE_BOOKS_REQUEST
+  };
+};
+
+export function getAvailableBooksSuccess(data) {
+  return {
+    type: types.GET_AVAILABLE_BOOKS_SUCCESS,
+    payload: data
+  };
+};
+
+export function getAvailableBooksFailure(data) {
+  return {
+    type: types.GET_AVAILABLE_BOOKS_FAILURE,
+    payload: data
+  };
+};
+
+
+
 //VIEW BOOK ACTION CREATOR
 
 export function viewSingleBook(data) {
@@ -187,6 +211,26 @@ export function changeBook(move) {
         return dispatch(getBook(viewing.lastOfSet));
       }
     }
+  };
+};
+
+export function getAvailableBooks() {
+  return (dispatch, getState) => {
+
+    dispatch(getAvailableBooksRequest());
+
+    return makeBookRequest('get')
+      .then((res) => {
+        console.log(res.status)
+        if(res.status === 200) {
+          dispatch(getAvailableBooksSuccess({data: res.data.books}));
+        }
+      })
+      .catch((err) => {
+        dispatch(getAvailableBooksFailure({
+          message: 'Unfortunately, we could not retrive any books from the database at this time.'
+        }))
+      });
   };
 };
 
