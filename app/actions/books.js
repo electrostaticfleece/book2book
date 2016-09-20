@@ -1,4 +1,5 @@
 import * as types from 'types';
+import { browserHistory } from 'react-router'
 import axios from 'axios';
 
 //CONSTANTS
@@ -24,15 +25,6 @@ function formatAPIData(book, id) {
 
 function createAPIString(query, startIndex) {
   return ['/books/v1/volumes?q=', query, '&startIndex=', startIndex].join('');
-};
-
-function joinDataToKey(obj, separator, joinVal) {
-  return Object.keys(obj).reduce((prev, next) => {
-    if(obj[next]) {
-      return [...prev, next + separator + obj[next]];
-    }
-    return prev;
-  }, []).join(joinVal);
 };
 
 function makeBookRequest(method, config, api = '/books') {
@@ -76,6 +68,29 @@ export function getNextBook(data) {
   };
 };
 
+//DELETE BOOK REQUEST ACTION CREATORS
+
+export function deleteBookRequest(data) {
+  return {
+    type: types.DELETE_BOOK_REQUEST,
+    payload: data
+  };
+};
+
+export function deleteBookSuccess(data) {
+  return {
+    type: types.DELETE_BOOK_SUCCESS,
+    payload: data
+  };
+};
+
+export function deleteBookFailure(data) {
+  return {
+    type: types.DELETE_BOOK_FAILURE,
+    payload: data
+  };
+};
+
 //POST BOOK ACTION CREATORS
 
 export function postBookRequest(data) {
@@ -99,18 +114,31 @@ export function postBookFailure(data) {
   };
 };
 
-//GET BOOK REQUEST THUNK ACTION CREATORS
+//VIEW BOOK ACTION CREATOR
+
+export function viewSingleBook(data) {
+  return {
+    type: types.VIEW_SINGLE_BOOK,
+    payload: {
+      data: data
+    }
+  };
+};
+
+
+//THUNK ACTION CREATORS
 
 export function getBook(startIndex = 0, newSearch = false) {
   return (dispatch, getState) => {
-    if(typeof startIndex === 'number' && typeof newSearch === 'boolean') {
+    const { input: { addBookQuery }, books } = getState();
+    const query = startIndex > 0 ? books.search.addBook.lastQuery : addBookQuery;
 
-      const { input: { addBook } } = getState();
+    if(typeof startIndex === 'number' && typeof newSearch === 'boolean' && typeof query === 'string') {
+
       const successAction = newSearch ? getNewBookSuccess : getBookSuccess;
-      const query = joinDataToKey(addBook, ':', '+');
       const api = createAPIString(query, startIndex);
 
-      dispatch(getBookRequest(addBook));
+      dispatch(getBookRequest(query));
 
       return makeBookRequest('get', googleConfig, api)
         .then(res => {
@@ -124,7 +152,8 @@ export function getBook(startIndex = 0, newSearch = false) {
               data: bookData, 
               totalItems: res.data.totalItems,
               lastOfSet: startIndex + items.length,
-              index: startIndex
+              index: startIndex,
+              query: query
             }));
 
           } 
@@ -166,6 +195,7 @@ export function postBook() {
     const { books: { viewing, search: { addBook: { data } } }} = getState();
     const book = data[viewing.index];
 
+    //dispatch an optimistic update
     dispatch(postBookRequest(book));
 
     return makeBookRequest('post', {data: book})
@@ -183,10 +213,52 @@ export function postBook() {
   };
 };
 
+export function deleteBook(book) {
+  return (dispatch, getState) => {
+    if(typeof book.altId === 'string') {
+      const { user: { books } } = getState();
+      const i = books.indexOf(book);
+
+      dispatch(deleteBookRequest({data: book, index: i}));
+
+      return makeBookRequest('delete', {data: book})
+        .then((res) => {
+          if(res.status === 200) {
+            dispatch(deleteBookSuccess(book));
+          }
+        })
+        .catch((err) => {
+          dispatch(deleteBookFailure({
+            message: 'Unfortunately, we could not delete your book. Please try again at a later time.',
+            book: book
+          }))
+        });
+    }
+
+  };
+};
+
+export function changeViewToSingle(data) {
+  return (dispatch, getState) => {
+    const changeState = new Promise((resolve, reject) => {
+      dispatch(viewSingleBook([data]))
+      resolve();
+    });
+
+    changeState.then(() => {
+      browserHistory.push('/viewBook');
+    })
+    .catch((err) => {
+      console.log('Something went wrong with your request');
+    })
+
+  };
+};
+
 //HELPER ACTION CREATORS
 
 export function clearResults() {
   return {
     type: types.CLEAR_RESULTS
-  }
-}
+  };
+};

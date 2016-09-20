@@ -1,0 +1,33 @@
+.searchForm {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  margin: 30px auto 20px auto;
+  max-width: 990px;
+}
+
+.icon {
+  composes: fa from '../common/icons.css';
+}
+
+.icon:hover {
+  cursor: pointer;
+}
+
+.search-icon {
+  composes: fa-search from '../../../node_modules/font-awesome/css/font-awesome.css';
+  color: white;
+  padding-top: 7px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.searchWrap {
+  border-bottom: 1px solid white;
+}
+
+@media (max-width: 1036px) {
+  .searchForm {
+    padding: 0 40px 0 40px;
+  }
+}

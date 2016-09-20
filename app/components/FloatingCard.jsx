@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames/bind';
-import { changeBook } from 'actions/books';
-import SearchInput from 'components/SearchInput';
 import styles from 'css/components/floatingCard';
 
 const cx = classNames.bind(styles);
@@ -61,7 +59,9 @@ class FloatingCard extends Component {
       type: dynamics.spring,
       duration: 1500,
       change: (obj) => {
-        this.refs.cardLight.style.backgroundImage = "linear-gradient(" + obj.angle + "deg, rgba(0, 0, 0, 0.35), transparent " + obj.width + "%)";
+        if(this.refs.cardLight) {
+          this.refs.cardLight.style.backgroundImage = "linear-gradient(" + obj.angle + "deg, rgba(0, 0, 0, 0.35), transparent " + obj.width + "%)";
+        }
       }
     })
   }
@@ -136,10 +136,25 @@ class FloatingCard extends Component {
   render() {
     const { image } = this.props;
     return (
-      <article className={cx('floatingCard')} ref={'floatingCard'} >
-        <div className={cx('cardWrap')} ref={'cardWrap'} onMouseLeave={ this.mouseLeave } onMouseMove={ this.mouseMove }>
-          <img src={image} className={cx('floatingCardThumb')} />
-          <span className={cx('cardLight')} ref={'cardLight'} ></span>
+      <article 
+        className={cx('floatingCard')} 
+        ref={'floatingCard'} 
+      >
+        <div 
+          className={cx('cardWrap')} 
+          ref={'cardWrap'} 
+          onMouseLeave={ this.mouseLeave } 
+          onMouseMove={ this.mouseMove }
+        >
+          <img 
+            src={image} 
+            className={cx('floatingCardThumb')} 
+          />
+          <span 
+            className={cx('cardLight')} 
+            ref={'cardLight'} 
+          >
+          </span>
         </div>
       </article>
     )

@@ -9,6 +9,7 @@ const data = (
     case types.GET_BOOK_SUCCESS:
       return [...state, ...action.payload.data];
     case types.GET_NEW_BOOK_SUCCESS:
+    case types.VIEW_SINGLE_BOOK:
       return action.payload.data;
     default: 
       return state;
@@ -38,8 +39,16 @@ const requests = (
         ...state, 
         status: 'Success', 
         data: data(state.data, action),
-        totalItems: action.payload.totalItems 
+        totalItems: action.payload.totalItems,
+        lastQuery: action.payload.query
       };
+    case types.VIEW_SINGLE_BOOK:
+      return {
+        ...state,
+        status: 'Success',
+        totalItems: 1,
+        data: data(state.data, action)
+      }
     case types.CLEAR_RESULTS: 
       return {};
     default: 
@@ -50,7 +59,8 @@ const requests = (
 const search = (
   state = {
     addBook: {},
-    findBook: {}
+    findBook: {},
+    viewBook: {}
   },
   action
 ) => {
@@ -64,6 +74,11 @@ const search = (
         ...state, 
         addBook: requests(state.addBook, action)
       };
+    case types.VIEW_SINGLE_BOOK:
+      return {
+        ...state,
+        viewBook: requests(state.viewBook, action)
+      }
     default:
       return state;
   };
@@ -93,6 +108,12 @@ const viewing = (
         id: action.payload.id, 
         index: action.payload.index
       };
+    case types.VIEW_SINGLE_BOOK: 
+      return {
+        id: action.payload.data[0].altId,
+        index: 0,
+        page: 'viewBook'
+      }
     default: 
       return state;
   };

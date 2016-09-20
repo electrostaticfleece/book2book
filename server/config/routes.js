@@ -17,7 +17,7 @@ export default (app) => {
       scope: [
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email',
-        ' https://www.googleapis.com/auth/books'
+        'https://www.googleapis.com/auth/books'
       ]
     }));
 
@@ -26,14 +26,23 @@ export default (app) => {
     // Otherwise, the authentication has failed.
     app.get('/auth/google/callback',
       passport.authenticate('google', {
-        successRedirect: '/',
         failureRedirect: '/'
-      })
+      }), (req, res) =>
+        req.session.save((err) => {
+          if(err){
+            console.log('Error: unable to save session before redirect');
+          } else {
+            res.redirect('/')
+          }
+        })
     );
+
+
   }
 
   if(controllers && controllers.Book) {
-    app.post('/books', controllers.Book.addBook)
+    app.post('/books', controllers.Book.addBook);
+    app.delete('/books', controllers.Book.removeBook);
   }
 
 

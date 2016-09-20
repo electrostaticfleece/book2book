@@ -1,50 +1,68 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
-import { getBook, clearResults, postBook } from 'actions/books';
+import { getBook, changeBook, postBook } from 'actions/books';
 import { typing, clearTyping } from 'actions/input';
 import styles from 'css/components/addBook';
 import SearchForm from 'components/SearchForm';
-import SingleBook from 'containers/SingleBook'
+import SingleBook from 'components/SingleBook'
 
 const cx = classNames.bind(styles);
 
 class Add extends Component {
   constructor(props) {
     super(props);
-    this.findBook = this.findBook.bind(this);
-    this.typing = this.typing.bind(this);
-    this.addBook = this.addBook.bind(this);
+    this.mapIcons = this.mapIcons.bind(this);
   }
 
-  findBook(e) {
-    const { getBook, clearResults } = this.props;
-    getBook(0, true);
-  }
+  mapIcons(condition) {
+    /* 
+     * A condition is passed through to the mapIcons function for our onClick 
+     * event because we need the currentstate of the application. Otherwise, 
+     * react does not recognize that the status of our search request has changed. 
+     */
+    const { changeBook, postBook } = this.props;
+    const icons = [ {
+      func: (e) => { return condition(changeBook, -1); },
+      classes: {left: true, 'icon-mid': true},
+      title: 'Previous Book'
+    }, {
+      func: (e) => postBook(),
+      classes: {plus: true, 'icon-mid': true},
+      title: 'Add book to my collection'
+    }, {
+      func: (e) => { return condition(changeBook, 1); },
+      classes: {right: true, 'icon-mid': true},
+      title: 'Next Book'
+    }];
 
-  addBook(e) {
-    const { postBook } = this.props;
-    e.preventDefault();
-    postBook();
-  }
-
-  typing(e) {
-    const { typing } = this.props;
-    e.preventDefault();
-
-    typing({
-      value: e.target.value, 
-      source: e.target.id
+    return icons.map((icon, i) => {
+      return (
+        <i
+          onClick = { icon.func }
+          className = {cx(icon.classes)}
+          title = { icon.title }
+          key = {i}
+        >
+        </i>
+      );
     });
-
   }
 
   render() {
-    const { input, books: { viewing } } = this.props;
+    const { input, getBook, typing, books } = this.props;
     return (
-      <div>
-        <SingleBook />
-        <SearchForm handleSubmit = { this.addBook } typing = { this.typing } input={input} findBook = { this.findBook } />
+      <div className={cx('addModule')} >
+        <SearchForm 
+          getBook = { getBook }
+          value={input.addBookQuery}
+          typing = { typing }
+          status = { books.search.addBook.status }
+        />
+        <SingleBook 
+          icons = { this.mapIcons }
+          books = { books }
+        />
       </div>
     )
   }
@@ -58,4 +76,4 @@ function mapStateToProps({user, input, books}) {
   };
 }
 
-export default connect(mapStateToProps, {getBook, typing, clearResults, postBook})(Add);
+export default connect(mapStateToProps, {getBook, typing, changeBook, postBook})(Add);

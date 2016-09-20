@@ -3,6 +3,13 @@ export default function(Models) {
   const User = Models.User;
   const sequelize = Models.sequelize;
 
+  function authenticated(user, res) {
+    if(!user) {
+      return res.status(401).send({message: 'You are not logged in. To add a book log into your account.'})
+    }
+    return null;
+  };
+
   function associateUser(created, book, id){
     if(created) {
       return book.addUsers([id]);
@@ -22,8 +29,7 @@ export default function(Models) {
   };
 
   function removeBook(req, res) {
-    const { body: { data } } = req;
-
+    const data = req.body;
     sequelize.transaction((t) => {
 
       return Book.findOne({
@@ -36,7 +42,7 @@ export default function(Models) {
             transaction: t
           } 
         ).then((book) => {
-          return book.removeAssociation(
+          return book.removeUser(
             [req.user.id],
             {transaction: t}
           );
@@ -48,18 +54,23 @@ export default function(Models) {
         message: 'We have removed your book from the database',
         book: data
       });
+      return true;
     })
     .catch((err) => {
       res.status(500).send({
         message: 'We were unable to remove your book from the database',
         book: data
       });
+      return null;
     });
-  }
+  };
 
   function addBook(req, res, next) {
 
     const { body: { data } } = req;
+    if(authenticated(req.user, res)){
+      return null;
+    }
 
     Book.findOrCreate({
       where: {altId: data.altId}, 
@@ -69,9 +80,9 @@ export default function(Models) {
       associateUser(created, book, req.user.id)
         .then((book) => {
           if(book) {
-            res.status(200).send({message: 'Your book has been added to our database'});
+            return res.status(200).send({message: 'Your book has been added to our database'});
           } else {
-            res.status(400).send({messge: 'We cannot process your request because you have already added this book to the database'});
+            return res.status(400).send({messge: 'We cannot process your request because you have already added this book to the database'});
           }
           return null;
         })

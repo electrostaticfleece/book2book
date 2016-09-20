@@ -9,6 +9,12 @@ body {
   margin: 0;
 }
 
+h1 {
+  font-family: var(--headingFont);
+  @apply --Hero;
+  margin: 0;
+}
+
 h2 {
   font-family: var(--headingFont);
   @apply --heading;

@@ -10,7 +10,7 @@ export default (sequelize, DataTypes) => {
       primaryKey: true
     },
     isbn: {
-      type: DataTypes.INTEGER
+      type: DataTypes.STRING
     },
     authors: {
       type: DataTypes.ARRAY(DataTypes.STRING),
@@ -19,7 +19,7 @@ export default (sequelize, DataTypes) => {
     image: {
       type: DataTypes.STRING
     },
-    category: {
+    categories: {
       type: DataTypes.ARRAY(DataTypes.STRING),
     },
     description: {

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
-
+import MyBooks from 'containers/MyBooks';
+import ViewBook from 'containers/ViewBook';
+import Home from 'containers/Home';
 import App from 'containers/App';
 import Add from 'containers/Add';
 
@@ -30,9 +32,23 @@ export default (store) => {
     }
     callback();
   };
+
+  const requireViewBook = (nextState, replace, callback) => {
+    const { books: { viewing: { page }}} = store.getState();
+    if(page !== 'viewBook' ) {
+      replace({
+        pathname: '/'
+      });
+    }
+    callback();
+  };
+
   return (
     <Route path="/" component={App}>
-      <Route path="addBook" component={Add} />
+      <IndexRoute component={Home} />
+      <Route path="addBook" component={Add} onEnter={requireAuth} />
+      <Route path="myBooks" component={MyBooks} onEnter={requireAuth} />
+      <Route path="viewBook" component={ViewBook} onEnter={requireViewBook}/>
     </Route>
   );
 };

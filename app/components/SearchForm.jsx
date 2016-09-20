@@ -1,19 +1,66 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames/bind';
 import SearchInput from 'components/SearchInput';
 import styles from 'css/components/searchForm';
 
 const cx = classNames.bind(styles);
 
-const SearchForm = ({handleSubmit, typing, findBook, input, addBook}) => {
-  return (
-    <form onSubmit= { handleSubmit } >
-      <SearchInput useStyles={'searchForm'} label={'Author'} value={input.addBook.inauthor} type={'search'} changeEvent={typing} />
-      <SearchInput useStyles={'searchForm'} label={'Title'} value={input.addBook.intitle} type={'search'} changeEvent={typing} />
-      <SearchInput useStyles={'button'} value = {'Find Book'} type={'button'} clickEvent={ findBook } />
-      <SearchInput useStyles={'button'} value = {'Add Book'} type={'submit'} />
-    </form>
-  );
+class SearchForm extends Component {
+  constructor(props) {
+    super(props);
+    this.findBook = this.findBook.bind(this);
+    this.typing = this.typing.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  findBook(e) {
+    const { status, getBook } = this.props;
+    if(typeof status === 'undefined' || status === 'Success') {
+      getBook(0, true);
+    }
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    this.findBook();
+  }
+
+  typing(e) {
+    e.preventDefault();
+    const { typing } = this.props;
+    if(typeof e.target.value === 'string') {
+      typing({
+        value: e.target.value, 
+        source: e.target.id
+      });
+
+    }
+  }
+
+  render() {
+    const { handleSubmit, value, status } = this.props;
+    return (
+      <form className={cx('searchForm')} onSubmit= { this.handleSubmit } >
+        <SearchInput 
+          useStyles={{input: 'searchInput', wrapper: 'searchWrapper'}} 
+          value={value} 
+          type={'search'} 
+          changeEvent={this.typing} 
+          id={'addBookQuery'}
+          placeholder={'Search for a book to add to your collection'}
+        />
+        <div className={cx('searchWrap')} >
+          <i 
+            onClick = { this.findBook } 
+            value = {'Find Book'}
+            className={cx({'icon': true, 'search-icon': true})}
+            title={'Serach for book'}
+          >
+          </i>
+        </div>
+      </form>
+    );
+  }
 };
 
 export default SearchForm;

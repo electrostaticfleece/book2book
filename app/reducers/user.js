@@ -72,11 +72,28 @@ const authenticated = (
   }
 };
 
+const books = (
+  state = [],
+  action
+) => {
+  switch(action.type) {
+    case types.POST_BOOK_SUCCESS:
+      return [...state, action.payload];
+    case types.DELETE_BOOK_REQUEST:
+      return state.filter((book, i) => i !== action.payload.index);
+    case types.DELETE_BOOK_FAILURE:
+      return [...state, action.payload.book];
+    default:
+      return state;
+  }
+}
+
 const userReducer = combineReducers({
   isLogin,
   isWaiting,
   authenticated,
-  message
+  message,
+  books
 });
 
 export default userReducer;

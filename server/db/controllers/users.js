@@ -1,10 +1,11 @@
 export default function(Models) {
   const User = Models.User;
+  const Book = Models.Book;
   const sequelize = Models.sequelize;
 
   function findById(userId) {
     if(typeof userId === 'string'){
-      return User.findById(userId);
+      return User.findById(userId, {include: [Book]});
     }
 
     throw new Error('The userID must be a string', '.server/db/controllers/users.js');
@@ -12,7 +13,7 @@ export default function(Models) {
 
   function findOne(arg) {
     if(typeof arg === 'object'){
-      return User.findOne(arg);
+      return User.findOne(arg, {include: [Book]});
     }
 
     throw new Error('Your argument must be an object', '.server/db/controllers/users.js');

@@ -1,52 +1,22 @@
 import * as types from 'types';
 import { combineReducers } from 'redux';
 
-const title = (
+const addBookQuery = (
   state = '',
   action
 ) => {
   switch(action.type) {
-    case types.TITLE_INPUT:
+    case types.ADD_BOOK_QUERY:
       return action.payload;
-    default: 
-      return state;
-  }
-};
-
-const author = (
-  state = '',
-  action
-) => {
-  switch(action.type) {
-    case types.AUTHOR_INPUT:
-      return action.payload;
-    default: 
-      return state;
-  };
-};
-
-const addBook = (
-  state = {
-    inauthor: '',
-    intitle: ''
-  },
-  action
-) => {
-  switch(action.type) {
-    case types.TITLE_INPUT:
-      return {...state, intitle: title(state.title, action)};
-    case types.AUTHOR_INPUT:
-      return {...state, inauthor: author(state.author, action)};
-    case types.CLEAR_TYPING: {
-      return {inauthor: '', intitle: ''};
-    }
+    case types.CLEAR_TYPING:
+      return '';
     default: 
       return state;
   };
 };
 
 const inputReducer = combineReducers({
-  addBook
+  addBookQuery
 });
 
 export default inputReducer;

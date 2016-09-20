@@ -1,0 +1,76 @@
+.multiBook {
+  margin: auto auto;
+}
+
+.row {
+  display: flex;
+  margin: 45px auto;
+}
+
+.book {
+  display: inline-block;
+  text-align: center;
+  position: relative;
+}
+
+.bookImg {
+  height: 190px;
+  vertical-align: top;
+}
+
+.bookWrap {
+  margin: auto auto;
+  display: inline-block;
+  position: relative;
+}
+
+.bookFilter {
+  height: 100%;
+  top: 0%;
+  width: 100%;
+  position: absolute;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.bookFilter:hover {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 2;
+}
+
+.icon {
+  position: absolute;
+  opacity: 0;
+  color: white;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.bookFilter:hover .icon {
+  cursor: pointer;
+  opacity: 1;
+}
+
+
+.delete {
+  composes: fa delete fa-3x from '../common/icons.css';
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -25%);
+}
+
+.view {
+  composes: fa view fa-3x from '../common/icons.css';
+  top: 75%;
+  left: 50%;
+  transform: translate(-50%, -75%);
+}
+
+.delete:hover {
+  color: red;
+}
+
+.view:hover {
+  color: #026BFE;
+}

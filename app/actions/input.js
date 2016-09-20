@@ -6,16 +6,9 @@ export function clearTyping() {
   };
 };
 
-export function titleInput(data) {
+export function addBookQuery(data) {
   return {
-    type: types.TITLE_INPUT,
-    payload: data
-  };
-};
-
-export function authorInput(data) { 
-  return {
-    type: types.AUTHOR_INPUT,
+    type: types.ADD_BOOK_QUERY,
     payload: data
   };
 };
@@ -31,19 +24,10 @@ export function typing(data) {
   return (dispatch, getState) => {
     const { source, value } = data;
     switch(source) {
-      case 'Title' :
-        return dispatch(titleInput(value));
-      case 'Author':
-        return dispatch(authorInput(value));
+      case 'addBookQuery' :
+        return dispatch(addBookQuery(value));
       default: 
         return dispatch(invalidSource(source));
     };
-  };
-};
-
-export function clearTyping(data) {
-  return {
-    type: types.CLEAR_TYPING,
-    payload: data
   };
 };
