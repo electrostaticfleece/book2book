@@ -9,9 +9,10 @@ const data = (
     case types.GET_BOOK_SUCCESS:
       return [...state, ...action.payload.data];
     case types.GET_NEW_BOOK_SUCCESS:
-    case types.VIEW_SINGLE_BOOK:
     case types.GET_AVAILABLE_BOOKS_SUCCESS:
       return action.payload.data;
+    case types.VIEW_SINGLE_BOOK:
+      return action.payload
     default: 
       return state;
   };
@@ -36,27 +37,15 @@ const requests = (
       };
     case types.GET_BOOK_SUCCESS: 
     case types.GET_NEW_BOOK_SUCCESS:
+    case types.GET_AVAILABLE_BOOKS_SUCCESS:
+    case types.VIEW_SINGLE_BOOK:
       return {
         ...state, 
         status: 'Success', 
         data: data(state.data, action),
-        totalItems: action.payload.totalItems,
+        totalItems: action.payload.totalItems || action.payload.length,
         lastQuery: action.payload.query
       };
-    case types.VIEW_SINGLE_BOOK:
-      return {
-        ...state,
-        status: 'Success',
-        totalItems: 1,
-        data: data(state.data, action)
-      };
-    case types.GET_AVAILABLE_BOOKS_SUCCESS:
-      return {
-        ...state,
-        status: 'Success',
-        totalItems: action.payload.length,
-        data: data(state.data, action)
-      }
     default: 
       return state;
   };
@@ -128,7 +117,7 @@ const viewing = (
       };
     case types.VIEW_SINGLE_BOOK: 
       return {
-        id: action.payload.data[0].altId,
+        id: action.payload[0].altId,
         index: 0,
         page: 'viewBook'
       }

@@ -1,9 +1,9 @@
 import * as types from 'types';
-import { browserHistory } from 'react-router'
+import { browserHistory } from 'react-router';
 import axios from 'axios';
 import { polyfill } from 'es6-promise';
 
-polyfill()
+polyfill();
 
 //CONSTANTS
 
@@ -11,6 +11,33 @@ const googleConfig = {
   baseURL: 'https://www.googleapis.com', 
   timeout: 5000
 };
+const singleStatus = [''];
+const singleNames = [
+  'getNewBookSuccess', 
+  'getNextBook', 
+  'clearResults', 
+  'resetView', 
+  'viewSingleBook'
+];
+const requestStatuses = [
+  'Request', 
+  'Success', 
+  'Failure'
+];
+const requestNames = [ 
+  'getBook', 
+  'deleteBook', 
+  'postBook', 
+  'getAvailableBooks' 
+];
+const pairs = [{
+    actionNames: requestNames, 
+    statuses: requestStatuses
+  } , {
+    actionNames: singleNames,
+    statuses: singleStatus
+  }
+];
 
 //AUXILIARY FUNCTIONS
 
@@ -24,131 +51,131 @@ function formatAPIData(book, id) {
     isbn: book.industryIdentifiers ? book.industryIdentifiers[0].identifier : null,
     altId: id
   };
-};
+}
 
 function createAPIString(query, startIndex) {
   return ['/books/v1/volumes?q=', query, '&startIndex=', startIndex].join('');
-};
+}
 
 function makeBookRequest(method, config, api = '/books') {
   return axios[method](api, config);
-};
+}
 
-//GET BOOK ACTION CREATORS
+function underscoreLeft(string) {
+  return '_' + string;
+}
 
-export function getBookRequest(data) {
-  return {
-    type: types.GET_BOOK_REQUEST,
-    payload: data
-  };
-};
+function createTypeName(statusName) {
+  return statusName.replace(/[A-Z]/g, underscoreLeft).toUpperCase();
+}
 
-export function getBookSuccess(data) {
-  return {
-    type: types.GET_BOOK_SUCCESS,
-    payload: data
-  };
-};
+//Creates a function that will handle a request based on whether a status is equal to http status code. 
 
-export function getNewBookSuccess(data) {
-  return {
-    type: types.GET_NEW_BOOK_SUCCESS,
-    payload: data
-  };
-};
-
-export function getBookFailure(data) {
-  return {
-    type: types.GET_BOOK_FAILURE,
-    payload: data
-  };
-};
-
-export function getNextBook(data) {
-  return {
-    type: types.GET_NEXT_BOOK,
-    payload: data
-  };
-};
-
-//DELETE BOOK REQUEST ACTION CREATORS
-
-export function deleteBookRequest(data) {
-  return {
-    type: types.DELETE_BOOK_REQUEST,
-    payload: data
-  };
-};
-
-export function deleteBookSuccess(data) {
-  return {
-    type: types.DELETE_BOOK_SUCCESS,
-    payload: data
-  };
-};
-
-export function deleteBookFailure(data) {
-  return {
-    type: types.DELETE_BOOK_FAILURE,
-    payload: data
-  };
-};
-
-//POST BOOK ACTION CREATORS
-
-export function postBookRequest(data) {
-  return {
-    type: types.POST_BOOK_REQUEST,
-    payload: data
-  };
-};
-
-export function postBookSuccess(data) {
-  return {
-    type: types.POST_BOOK_SUCCESS,
-    payload: data
-  };
-};
-
-export function postBookFailure(data) {
-  return {
-    type: types.POST_BOOK_FAILURE,
-    payload: data
-  };
-};
-
-//GET AVAILABLE BOOKS ACTION CREATORS
-
-export function getAvailableBooksRequest() {
-  return {
-    type: types.GET_AVAILABLE_BOOKS_REQUEST
-  };
-};
-
-export function getAvailableBooksSuccess(data) {
-  return {
-    type: types.GET_AVAILABLE_BOOKS_SUCCESS,
-    payload: data
-  };
-};
-
-export function getAvailableBooksFailure(data) {
-  return {
-    type: types.GET_AVAILABLE_BOOKS_FAILURE,
-    payload: data
-  };
-};
-
-//VIEW BOOK ACTION CREATOR
-
-export function viewSingleBook(data) {
-  return {
-    type: types.VIEW_SINGLE_BOOK,
-    payload: {
-      data: data
+function createHandleRes(code, actionCreator) {
+  return function(res) {
+    if(res.status === code) {
+      return actionCreator(res);
     }
   };
-};
+}
+
+/*
+ * Standardizes and simplifies requests by dispatching three actions that correspond
+ * to the request lifecycle (optimistic, success, and failure). If additional dispatches 
+ * are needed, simply wrap them in the function corresponding to the dispatch and return 
+ * the final action creator that needs to be fired for that lifecycle function. 
+ *
+ * @dispatch: The dispatch from your thunk 
+ * @optimistic: An optimistic action creator or function that returns an action creator 
+ * to be fired before the request
+ * @config: Configuration for your request. It must include a type. Options and 
+ * and an api string are optional
+ * @handleRes: An action creator or function that returns an action creator to be fired after
+ * a response is recieved
+ * @failire: An action creator of function that returns an action creator to be fired after
+ * a response fails
+ */
+
+function handleRequests(dispatch, optimistic, config, handleRes, failure){
+
+  dispatch(optimistic());
+
+  if(handleRes && failure && config.type) {
+    return makeBookRequest(config.type, config.options, config.api)
+      .then((res) => {
+        dispatch(handleRes(res));
+      })
+      .catch((err) => {
+        dispatch(failure(err));
+      });
+  }
+}
+
+/*
+ * Creates a generic action creator with a type and a payload. Types are uppercase with an 
+ * underscore between words. The payload is a generic payload that references the data argument. 
+ *
+ * @status : The suffix you wish to append to the name of your action
+ * @name : The name of your action 
+ * @writeTo: The object actions will be written to
+ * @types: The types object you wish to reference
+ * @namingFunc: A function used to generate type names
+ */
+
+function createActionCreator(status, name, writeTo, types, namingFunc) {
+  const statusName = name + status;
+  const typeName = namingFunc(statusName);
+  writeTo[statusName] = function(data) {
+    return {
+      type: types[typeName],
+      payload: data
+    };
+  };
+}
+
+/*
+ * Takes a pairing of actionNames and statuses and writes an action to the actions object for each 
+ * status/action combination 
+ *
+ * @pairs : An object with two properties (both arrays) named actionNames & statuses
+ * @actions: An object to write actions to. Defaults to an empty object
+ */
+
+function createActionCreators(pairs, actions = {}) {
+  pairs.forEach((pair) => {
+    const {actionNames, statuses} = pair;
+
+    actionNames.forEach((name) => {
+
+      statuses.forEach((status) => {
+        createActionCreator(status, name, actions, types, createTypeName);
+      });
+    });
+  });
+  return actions;
+}
+
+//A necessary evil of optimization
+
+export const { 
+  getBookRequest, 
+  getBookFailure, 
+  getBookSuccess,
+  deleteBookRequest,
+  deleteBookSuccess,
+  deleteBookFailure,
+  postBookRequest,
+  postBookSuccess,
+  postBookFailure,
+  getAvailableBooksRequest,
+  getAvailableBooksSuccess,
+  getAvailableBooksFailure,
+  getNewBookSuccess,
+  getNextBook,
+  clearResults,
+  resetView,
+  viewSingleBook
+} = createActionCreators(pairs);
 
 //THUNK ACTION CREATORS
 
@@ -161,36 +188,32 @@ export function getBook(startIndex = 0, newSearch = false) {
 
       const successAction = newSearch ? getNewBookSuccess : getBookSuccess;
       const api = createAPIString(query, startIndex);
+      const message = 'Unfortunately, your query failed. Please check your query and try again';
 
-      dispatch(getBookRequest(query));
-
-      return makeBookRequest('get', googleConfig, api)
-        .then(res => {
-          if(res.status === 200) {
-            const { data: { items } } = res;
-            const bookData = items.map((book) => {
-              return formatAPIData(book.volumeInfo, book.id);
-            });
-
-            dispatch(successAction({
-              data: bookData, 
-              totalItems: res.data.totalItems,
-              lastOfSet: startIndex + items.length,
-              index: startIndex,
-              query: query
-            }));
-
-          } 
-        })
-        .catch((err) => {
-          dispatch(getBookFailure({
-            message: 'Unfortunately, your query failed. Please check your query and try again', 
-            query: query
-          }));
+      const optimistic = () => getBookRequest(query);
+      const config = {type: 'get', options: googleConfig, api};
+      const handleResponse = (res) => {
+        const {data: { items } } = res;
+        const bookData = items.map((book) => {
+          return formatAPIData(book.volumeInfo, book.id);
         });
+        return successAction({
+          data: bookData,
+          totalItems: res.data.totalItems,
+          lastOfSet: startIndex + items.length,
+          index: startIndex,
+          query: query
+        });
+      };
+      const success = createHandleRes(200, handleResponse);
+      const failure = () => getBookFailure({message, query});
+
+      handleRequests(dispatch, optimistic, config, success, failure);
     }
   };
-};
+}
+
+//Will get a book in a set based on the value of move or request the next set of books.
 
 export function changeBook(move) {
   return (dispatch, getState) => {
@@ -211,112 +234,75 @@ export function changeBook(move) {
       }
     }
   };
-};
+}
+
+//Will get all available books in the database or will limit the request to a set number of books
 
 export function getAvailableBooks(limit) {
-  return (dispatch, getState) => {
-    dispatch(getAvailableBooksRequest());
+  return (dispatch) => {
+    const config = {type: 'get', options: {}, api: '/books/' + (limit || '')};
+    const message = 'Unfortunately, we could not retrive any books from the database at this time.';
 
-    return makeBookRequest('get', {}, '/books/' + (limit || ''))
-      .then((res) => {
-        if(res.status === 200) {
-          dispatch(getAvailableBooksSuccess({data: res.data.books}));
-        }
-      })
-      .catch((err) => {
-        dispatch(getAvailableBooksFailure({
-          message: 'Unfortunately, we could not retrive any books from the database at this time.'
-        }))
-      });
+    const success = createHandleRes(200, (res) => getAvailableBooksSuccess({data: res.data.books}));
+    const failure = () => getAvailableBooksFailure({message});
+
+    return handleRequests(dispatch, getAvailableBooksRequest, config, success, failure);
   };
-};
+}
 
 export function postBook() {
   return (dispatch, getState) => {
     const { books: { viewing, search: { addBook: { data } } }, user: { books }} = getState();
+
     const book = data[viewing.index];
+    const message = 'Unfortunately we could not add your book because it\'s already in your collection or there was an error. Please try again';
+    const inCollection = books.some((userBook) => userBook.altId === book.altId);
+    const optimisticAction = inCollection ? postBookFailure(message) : postBookRequest(book);
+    const config = {type: 'post', options: {data: book}};
 
-    //Move the user to their book page
-    browserHistory.push('/mybooks');
+    const optimistic = () => { browserHistory.push('/mybooks'); return optimisticAction; };
+    const success = inCollection ? null : createHandleRes(200, () => postBookSuccess(book));
+    const failure = inCollection ? null : () => postBookFailure({message, book, index: getState().user.books.lastIndexOf(book)});
 
-    //dispatch an optimistic update if the book is not in the user's collection
-    if(books.every((userBook) => userBook.altId !== book.altId)){
-      dispatch(postBookRequest(book));
-    } else {
-      return dispatch(postBookFailure({
-        message: 'We could not add your book because it has already been added'
-      }));
-    }
-
-    return makeBookRequest('post', {data: book})
-      .then((res) => {
-        if(res.status === 200) {
-          dispatch(postBookSuccess(book));
-        }
-      })
-      .catch((err) => {
-        const i = getState().user.books.lastIndexOf(book);
-        dispatch(postBookFailure({
-          message: 'Unfortunately, we could not add your book. Please check your submission and try again.',
-          book: book,
-          index: i
-        }))
-      });
+    return handleRequests(dispatch, optimistic, config, success, failure);
   };
-};
+}
 
 export function deleteBook(book) {
   return (dispatch, getState) => {
+    const { user: { books } } = getState();
+
     if(typeof book.altId === 'string') {
-      const { user: { books } } = getState();
-      const i = books.lastIndexOf(book);
+      const bookIndex = books.lastIndexOf(book);
+      const optimisticData = {data: book, index: bookIndex};
+      const config = {type: 'delete', options: {data: book}};
+      const message = 'Unfortunately, we could not delete your book. Please try again at a later time.';
 
-      dispatch(deleteBookRequest({data: book, index: i}));
+      const optimistic = () => deleteBookRequest(optimisticData);
+      const success = createHandleRes(200, () => deleteBookSuccess(book));
+      const failure = () => deleteBookFailure({message, book});
 
-      return makeBookRequest('delete', {data: book})
-        .then((res) => {
-          if(res.status === 200) {
-            dispatch(deleteBookSuccess(book));
-          }
-        })
-        .catch((err) => {
-          dispatch(deleteBookFailure({
-            message: 'Unfortunately, we could not delete your book. Please try again at a later time.',
-            book: book
-          }))
-        });
+      return handleRequests(dispatch, optimistic, config, success, failure);
     }
 
   };
-};
+}
+
+//changes the view to display information about a single book
 
 export function changeViewToSingle(data) {
-  return (dispatch, getState) => {
-    const changeState = new Promise((resolve, reject) => {
-      dispatch(viewSingleBook([data]))
+  return (dispatch) => {
+    const changeState = new Promise((resolve) => {
+      dispatch(viewSingleBook([data]));
       resolve();
     });
 
     changeState.then(() => {
       browserHistory.push('/viewBook');
     })
-    .catch((err) => {
+    .catch(() => {
       console.log('Something went wrong with your request');
-    })
+    });
 
   };
-};
-
-//HELPER ACTION CREATORS
-
-export function clearResults() {
-  return {
-    type: types.CLEAR_RESULTS
-  };
-};
-
-export function resetView() {
-  return {
-    type: types.RESET_VIEW
-  };
-};
+}
