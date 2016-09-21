@@ -14,6 +14,11 @@ class MyBooks extends Component {
     this.viewButton = this.viewButton.bind(this);
   }
 
+  componentDidMount() {
+    //Incase we come from a page where the scroll bar is positioned
+    window.scrollTo(0, 0);
+  }
+
   deleteButton() {
     const { deleteBook } = this.props;
     return {

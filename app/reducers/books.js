@@ -23,14 +23,12 @@ const requests = (
   ) => {
   switch(action.type) {
     case types.GET_BOOK_REQUEST:
-    case types.POST_BOOK_REQUEST:
     case types.GET_AVAILABLE_BOOKS_REQUEST:
       return {
         ...state, 
         status: 'Requested'
       };
     case types.GET_BOOK_FAILURE: 
-    case types.POST_BOOK_FAILURE:
     case types.GET_AVAILABLE_BOOKS_FAILURE:
       return {
         ...state, 
@@ -59,8 +57,6 @@ const requests = (
         totalItems: action.payload.length,
         data: data(state.data, action)
       }
-    case types.CLEAR_RESULTS: 
-      return {};
     default: 
       return state;
   };
@@ -79,7 +75,6 @@ const search = (
     case types.GET_BOOK_FAILURE:
     case types.GET_BOOK_SUCCESS:
     case types.GET_NEW_BOOK_SUCCESS:
-    case types.CLEAR_RESULTS:
       return {
         ...state, 
         addBook: requests(state.addBook, action)
@@ -96,6 +91,12 @@ const search = (
         ...state,
         findBook: requests(state.findBook, action)
       };
+    case types.CLEAR_RESULTS:
+      return {
+        addBook: {},
+        findBook: {},
+        viewBook: {}
+      }
     default:
       return state;
   };
@@ -130,6 +131,13 @@ const viewing = (
         id: action.payload.data[0].altId,
         index: 0,
         page: 'viewBook'
+      }
+    case types.RESET_VIEW:
+    case types.CLEAR_RESULTS:
+      return {
+        id: null,
+        index: null,
+        page: null
       }
     default: 
       return state;

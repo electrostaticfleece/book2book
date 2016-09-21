@@ -97,14 +97,19 @@ export default function(Models) {
   };
 
   function getAllBooks(req, res, next) {
-
-    Book.findAll({
+    const dbQuery = {
       where: {
         available: {
           gt: 0
         }
-      } 
-    })
+      },
+      order: [['updatedAt', 'DESC']]
+    };
+    if(req.params.limit) {
+      dbQuery.limit = req.params.limit;
+    }
+
+    Book.findAll(dbQuery)
     .then((books) => {
       if(books) {
         return res.status(200).send({

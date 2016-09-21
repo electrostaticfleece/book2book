@@ -13,6 +13,11 @@ class Home extends Component {
     this.viewButton = this.viewButton.bind(this);
   }
 
+  componentDidMount() {
+    //Incase we come from a page where the scroll bar is positioned
+    window.scrollTo(0, 0);
+  }
+
   viewButton() {
     const { changeViewToSingle } = this.props;
     return {
@@ -21,7 +26,7 @@ class Home extends Component {
     };
   }
 
-  static need = [getAvailableBooks]
+  static need = [ () => { console.log('Firing'); return getAvailableBooks(14) } ]
 
   render() {
     const { books } = this.props;

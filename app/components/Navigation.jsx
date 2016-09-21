@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { logOut } from 'actions/users';
+import { resetView } from 'actions/books';
 import classNames from 'classnames/bind';
 import styles from 'css/components/navigation';
 
@@ -18,7 +19,7 @@ class Navigation extends Component {
     return auth ? links : links.filter(link => !link.authRequired);
   }
 
-  mapLinks(auth, selected) {
+  mapLinks(auth, selected, actions) {
     const links = [{
       href: '/',
       authRequred: false,
@@ -26,7 +27,8 @@ class Navigation extends Component {
     }, {
       href: '/addbook',
       authRequired: true, 
-      name: 'Add Book'
+      name: 'Add Book',
+      onClick: actions.resetView
     }, {
       href: '/mybooks',
       authRequired: true,
@@ -42,36 +44,34 @@ class Navigation extends Component {
     }];
 
     return this.filterLinks(links, auth).map((link) => {
-      const { href, name } = link;
+      const { href, name, onClick } = link;
        return (
         <Link 
           key={name} 
           to={href} 
           className={cx({navLink: true, selected: selected === href})}
+          onClick = { onClick || null }
         >
-          <li 
-            className={cx({linkName: true})}
-          >
-            {name}
-          </li>
+          <li className={cx({linkName: true})}>{name}</li>
         </Link>
       );
     });
   }
 
   render() {
-    const { user, logOut, routing: {locationBeforeTransitions: { pathname }} } = this.props;
+    const { user, logOut, routing, resetView } = this.props;
     const auth = user.authenticated;
+    const pathname = routing && routing.locationBeforeTransitions ? routing.locationBeforeTransitions.pathname : null;
     return (
       <nav className={cx('navigation')}>
         <ul className={cx('linkList')}>
-          {this.mapLinks(auth, pathname)}
+          {this.mapLinks(auth, pathname, {resetView})}
           <a 
             href={auth ? '/logout' : '/auth/google'} 
             onClick = { auth ? logOut : null}
             className={cx('navLink')}
           >
-            <li className={cx('linkName')}>{auth ? 'LogOut' : 'Google Login'}</li>
+            <li className={cx('linkName')}>{auth ? 'Logout' : 'Google Login'}</li>
           </a>
         </ul>
       </nav>
@@ -86,4 +86,4 @@ function mapStateToProps({user, routing}) {
   };
 };
 
-export default connect(mapStateToProps, {logOut})(Navigation);
+export default connect(mapStateToProps, {logOut, resetView })(Navigation);

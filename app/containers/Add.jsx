@@ -16,8 +16,12 @@ class Add extends Component {
   }
 
   componentDidMount() {
+    const {clearTyping} = this.props;
+    //Clear any typing from a previous search
+    clearTyping();
     //Incase we come from a page where the scroll bar is positioned
     window.scrollTo(0, 0);
+
   }
 
   mapIcons(condition) {
@@ -83,4 +87,4 @@ function mapStateToProps({user, input, books}) {
   };
 }
 
-export default connect(mapStateToProps, {getBook, typing, changeBook, postBook})(Add);
+export default connect(mapStateToProps, {getBook, typing, changeBook, postBook, clearTyping})(Add);

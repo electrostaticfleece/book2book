@@ -1,6 +1,9 @@
 import * as types from 'types';
 import { browserHistory } from 'react-router'
 import axios from 'axios';
+import { polyfill } from 'es6-promise';
+
+polyfill()
 
 //CONSTANTS
 
@@ -136,8 +139,6 @@ export function getAvailableBooksFailure(data) {
   };
 };
 
-
-
 //VIEW BOOK ACTION CREATOR
 
 export function viewSingleBook(data) {
@@ -148,7 +149,6 @@ export function viewSingleBook(data) {
     }
   };
 };
-
 
 //THUNK ACTION CREATORS
 
@@ -185,7 +185,7 @@ export function getBook(startIndex = 0, newSearch = false) {
         .catch((err) => {
           dispatch(getBookFailure({
             message: 'Unfortunately, your query failed. Please check your query and try again', 
-            query: addBook
+            query: query
           }));
         });
     }
@@ -201,7 +201,6 @@ export function changeBook(move) {
       const totalItems = search[viewing.page].totalItems;
       const nextIndex = viewing.index + move;
 
-
       if(nextIndex < data.length && nextIndex >= 0) {
         const id = data[nextIndex].altId;
         dispatch(getNextBook({index: nextIndex, id}));
@@ -214,14 +213,12 @@ export function changeBook(move) {
   };
 };
 
-export function getAvailableBooks() {
+export function getAvailableBooks(limit) {
   return (dispatch, getState) => {
-
     dispatch(getAvailableBooksRequest());
 
-    return makeBookRequest('get')
+    return makeBookRequest('get', {}, '/books/' + (limit || ''))
       .then((res) => {
-        console.log(res.status)
         if(res.status === 200) {
           dispatch(getAvailableBooksSuccess({data: res.data.books}));
         }
@@ -236,11 +233,20 @@ export function getAvailableBooks() {
 
 export function postBook() {
   return (dispatch, getState) => {
-    const { books: { viewing, search: { addBook: { data } } }} = getState();
+    const { books: { viewing, search: { addBook: { data } } }, user: { books }} = getState();
     const book = data[viewing.index];
 
-    //dispatch an optimistic update
-    dispatch(postBookRequest(book));
+    //Move the user to their book page
+    browserHistory.push('/mybooks');
+
+    //dispatch an optimistic update if the book is not in the user's collection
+    if(books.every((userBook) => userBook.altId !== book.altId)){
+      dispatch(postBookRequest(book));
+    } else {
+      return dispatch(postBookFailure({
+        message: 'We could not add your book because it has already been added'
+      }));
+    }
 
     return makeBookRequest('post', {data: book})
       .then((res) => {
@@ -249,9 +255,11 @@ export function postBook() {
         }
       })
       .catch((err) => {
+        const i = getState().user.books.lastIndexOf(book);
         dispatch(postBookFailure({
           message: 'Unfortunately, we could not add your book. Please check your submission and try again.',
-          book: book
+          book: book,
+          index: i
         }))
       });
   };
@@ -261,7 +269,7 @@ export function deleteBook(book) {
   return (dispatch, getState) => {
     if(typeof book.altId === 'string') {
       const { user: { books } } = getState();
-      const i = books.indexOf(book);
+      const i = books.lastIndexOf(book);
 
       dispatch(deleteBookRequest({data: book, index: i}));
 
@@ -304,5 +312,11 @@ export function changeViewToSingle(data) {
 export function clearResults() {
   return {
     type: types.CLEAR_RESULTS
+  };
+};
+
+export function resetView() {
+  return {
+    type: types.RESET_VIEW
   };
 };

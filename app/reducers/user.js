@@ -77,12 +77,14 @@ const books = (
   action
 ) => {
   switch(action.type) {
-    case types.POST_BOOK_SUCCESS:
+    case types.POST_BOOK_REQUEST:
       return [...state, action.payload];
     case types.DELETE_BOOK_REQUEST:
+    case types.POST_BOOK_FAILURE:
       return state.filter((book, i) => i !== action.payload.index);
     case types.DELETE_BOOK_FAILURE:
       return [...state, action.payload.book];
+    case types.POST_BOOK_SUCCESS:
     default:
       return state;
   }

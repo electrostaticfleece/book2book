@@ -1,12 +1,12 @@
 @import 'common/typography';
 
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,800|Arvo:400,400i,700|Quattrocento:700);
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700|Arvo:400,400i,700);
 
 /* General styles */
 
 body {
   margin: 0;
-  background-color: #2e2e2e;
+  background-color: #1d1d1d;
 }
 
 h1 {

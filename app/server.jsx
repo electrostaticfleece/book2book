@@ -23,7 +23,6 @@ axios.defaults.baseURL = `http://${clientConfig.host}:${clientConfig.port}`;
  */
 export default function render(req, res) {
   const authenticated = req.isAuthenticated ? req.isAuthenticated() : null;
-  console.log(authenticated);
   const usersBooks = req.user && req.user.Books ? req.user.Books : [];
   const history = createMemoryHistory();
   const store = configureStore({
