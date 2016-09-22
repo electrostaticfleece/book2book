@@ -1,21 +1,18 @@
 import expect from 'expect';
 import reducer from 'reducers/books';
-import * as types from 'types';
 import testData from 'tests/data/books';
 
 describe('Books reducer', () => {
 
   const { 
-    resData, 
     bookObj, 
-    reqData, 
     testActions, 
     reducerData: { defaultData, addBookLoaded }
   } = testData;
 
   const { search, viewing } = addBookLoaded;
-  const { addBook: { data, status, totalItems} } = search;
-  const { id, index, page, lastOfSet } = viewing;
+  const { addBook: { data } } = search;
+  const {  page } = viewing;
 
   const altId = 'd2r2d3212edew';
   const newBook = {...bookObj, altId: altId};

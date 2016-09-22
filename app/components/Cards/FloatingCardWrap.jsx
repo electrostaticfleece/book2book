@@ -1,6 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import classNames from 'classnames/bind';
+import React, { Component } from 'react';
 import FloatingCard from 'components/Cards/FloatingCard';
 import dynamics from 'dynamics.js';
 import galaxy from 'images/galaxy.gif';
@@ -19,6 +17,6 @@ class FloatingCardWrap extends Component {
       />
     );
   }
-};
+}
 
 export default FloatingCardWrap;

@@ -11,11 +11,11 @@ const replaceData = function(data, replace) {
 
 const resBookData = {
   title: '1984',
-  authors: ["George Orwell"],
+  authors: ['George Orwell'],
   categories: ['Fiction'],
-  description: "The year 1984 has come and gone, but George Orwell's prophetic, nightmarish vision in 1949 of the world we were becoming is timelier than ever.", 
+  description: 'The year 1984 has come and gone, but George Orwell\'s prophetic, nightmarish vision in 1949 of the world we were becoming is timelier than ever.', 
   imageLinks: { 
-    thumbnail: "http://books.google.com/books/content?id=bC8wDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    thumbnail: 'http://books.google.com/books/content?id=bC8wDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api'
   },
   industryIdentifiers:  [{identifier: '0547504187'}],
   altId: 'avke340df32c'
@@ -24,8 +24,7 @@ const resBookData = {
 const bookObj = replaceData(resBookData, {
   industryIdentifiers: [ 'isbn', resBookData.industryIdentifiers[0].identifier],
   imageLinks: ['image', resBookData.imageLinks.thumbnail]
-  }
-);
+});
 
 const reqData = {
   inauthor: 'Orwell',
@@ -68,7 +67,7 @@ const reducerData = {
       lastOfSet: 1
     }
   }
-}
+};
 
 const testActions = {
   getBookRequest : {
@@ -133,4 +132,4 @@ export default {
   reqData,
   testActions,
   reducerData
-}
+};

@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 import styles from 'css/components/card';
 
@@ -16,9 +16,8 @@ class Card extends Component {
         { cardStyles.background ? <div className={cx(cardStyles.background)}></div> : null}
         {this.props.children}
      </div>
-    )
+    );
   }
-
 }
 
 export default Card;

@@ -31,13 +31,12 @@ const requestNames = [
   'getAvailableBooks' 
 ];
 const pairs = [{
-    actionNames: requestNames, 
-    statuses: requestStatuses
-  } , {
-    actionNames: singleNames,
-    statuses: singleStatus
-  }
-];
+  actionNames: requestNames, 
+  statuses: requestStatuses
+} , {
+  actionNames: singleNames,
+  statuses: singleStatus
+}];
 
 //AUXILIARY FUNCTIONS
 

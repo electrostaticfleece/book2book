@@ -15,12 +15,12 @@ describe('User Controllers', function() {
     state: 'Oregon',
     picture: 'http://i.imgur.com/j5ZqyLB.jpg',
     google: 'Ande3402VeoeRfe3203'
-  }]
+  }];
 
   const Model = {
     User: {
       findById: function(id) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve) {
           const userObj = data.find((user) => {
             return user.id === id;
           });
@@ -28,11 +28,11 @@ describe('User Controllers', function() {
         });
       }
     }
-  }
+  };
 
   const Instance = {
     
-  }
+  };
 
   const controller = injectModel(Model);
 
@@ -44,7 +44,7 @@ describe('User Controllers', function() {
 
   afterEach(function() {
     sandbox.restore();
-  })
+  });
 
   it('Gets a user from the database', function(done) {
     controller.getUserById('1a')
@@ -58,9 +58,5 @@ describe('User Controllers', function() {
     });
 
   });
-
-  it('Updates a users settings in the database', function(done) {
-    controller.
-  })
   
 });

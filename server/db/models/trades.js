@@ -35,7 +35,7 @@ export default (sequelize, DataTypes) => {
     }
   });
 
-   Trade.beforeCreate(setID);
+  Trade.beforeCreate(setID);
 
   return Trade;
 };

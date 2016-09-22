@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 import styles from 'css/components/searchInput';
 const cx = classNames.bind(styles);
@@ -20,7 +20,8 @@ class SearchInput extends Component {
           placeholder={placeholder} 
           value={value} 
           onClick={clickEvent} 
-          onChange = {changeEvent}/>
+          onChange = {changeEvent}
+        />
       </div>
     );
   }

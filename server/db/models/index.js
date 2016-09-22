@@ -44,8 +44,8 @@ sequelize.sync().then(() => {
   console.log('Postgres Database synced with models');
 })
 .catch((err) => {
-  console.log(err)
-})
+  console.log(err);
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { logOut } from 'actions/users';
@@ -45,7 +45,7 @@ class Navigation extends Component {
 
     return this.filterLinks(links, auth).map((link) => {
       const { href, name, onClick } = link;
-       return (
+      return (
         <Link 
           key={name} 
           to={href} 
@@ -77,13 +77,13 @@ class Navigation extends Component {
       </nav>
     );
   }
-};
+}
 
 function mapStateToProps({user, routing}) {
   return {
     user,
     routing
   };
-};
+}
 
 export default connect(mapStateToProps, {logOut, resetView })(Navigation);

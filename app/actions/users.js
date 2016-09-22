@@ -1,6 +1,4 @@
 import { polyfill } from 'es6-promise';
-import request from 'axios';
-import { push } from 'react-router-redux';
 
 import * as types from 'types';
 
@@ -15,9 +13,6 @@ polyfill();
  * @param String endpoint - defaults to /login
  * @return Promise
  */
-function makeUserRequest(method, data, api = '/login') {
-  return request[method](api, data);
-}
 
 // Log Out Action Creators
 export function beginLogout() {

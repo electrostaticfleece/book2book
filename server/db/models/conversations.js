@@ -35,7 +35,7 @@ export default (sequelize, DataTypes) => {
     }
   });
 
-   Conversation.beforeCreate(setID);
+  Conversation.beforeCreate(setID);
 
   return Conversation;
 };

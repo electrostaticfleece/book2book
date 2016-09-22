@@ -43,7 +43,7 @@ export default (sequelize, DataTypes) => {
         Book.belongsToMany(models.Trade, {
           foreignKey: 'altId',
           through: 'TradeBook'
-        })
+        });
         
       }
     }

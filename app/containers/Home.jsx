@@ -60,6 +60,6 @@ function mapStateToProps({books, user}) {
     user,
     books
   };
-};
+}
 
 export default connect(mapStateToProps, {getAvailableBooks, changeViewToSingle})(Home);

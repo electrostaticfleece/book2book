@@ -23,20 +23,20 @@ var commonLoaders = [
 
 module.exports = {
     // The configuration for the server-side testing
-    name: 'server-side testing',
-    target: 'node',
-    module: {
-      loaders: commonLoaders
-    },
-    externals: [nodeExternals()],
-    resolve: {
-      extensions: ['', '.js', '.jsx']
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-          __DEVCLIENT__: false,
-          __DEVSERVER__: true
-        }),
-        new webpack.IgnorePlugin(/vertx/)
-    ]
+  name: 'server-side testing',
+  target: 'node',
+  module: {
+    loaders: commonLoaders
+  },
+  externals: [nodeExternals()],
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      __DEVCLIENT__: false,
+      __DEVSERVER__: true
+    }),
+    new webpack.IgnorePlugin(/vertx/)
+  ]
 };

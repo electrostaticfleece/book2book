@@ -1,6 +1,6 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames/bind';
-import SearchInput from 'components/SearchInput';
+import SearchInput from 'components/Search/SearchInput';
 import styles from 'css/components/searchForm';
 
 const cx = classNames.bind(styles);
@@ -13,7 +13,7 @@ class SearchForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  findBook(e) {
+  findBook() {
     const { status, getBook } = this.props;
     if(typeof status === 'undefined' || status === 'Success') {
       getBook(0, true);
@@ -33,12 +33,11 @@ class SearchForm extends Component {
         value: e.target.value, 
         source: e.target.id
       });
-
     }
   }
 
   render() {
-    const { handleSubmit, value, status } = this.props;
+    const { value } = this.props;
     return (
       <form className={cx('searchForm')} onSubmit= { this.handleSubmit } >
         <SearchInput 
@@ -61,6 +60,6 @@ class SearchForm extends Component {
       </form>
     );
   }
-};
+}
 
 export default SearchForm;

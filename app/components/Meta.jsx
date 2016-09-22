@@ -10,11 +10,11 @@ if(__DEVSERVER__) {
 
 const Meta = () => (
   <Helmet
-    htmlAttributes={{"lang": "en", "amp": undefined}}
+    htmlAttributes={{'lang': 'en', 'amp': undefined}}
     title="Book 2 Book" meta={config.meta}
     link={config.link}
   />
-)
+);
 
 ReactDOMServer.renderToString(<Meta />);
 const header = Helmet.rewind();

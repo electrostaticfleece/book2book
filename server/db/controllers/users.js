@@ -9,7 +9,7 @@ export default function(Models) {
     }
 
     throw new Error('The userID must be a string', '.server/db/controllers/users.js');
-  };
+  }
 
   function findOne(arg) {
     if(typeof arg === 'object'){
@@ -25,7 +25,7 @@ export default function(Models) {
     }
 
     throw new Error('The user and settings must be objects. The user must have an update property', '.server/db/controllers/users.js');
-  };
+  }
 
   function createUserWithToken(profile, accessToken, done) {
     if(typeof profile === 'object' && typeof accessToken === 'string') {
@@ -87,7 +87,7 @@ export default function(Models) {
   function logOut(req, res , next) {
     // Do email and password validation for the server
     req.logout();
-    next()  
+    next();
   }
 
   return {
@@ -98,5 +98,5 @@ export default function(Models) {
     attachGoogleAccount,
     deleteAccount,
     logOut
-  }
+  };
 }

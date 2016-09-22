@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import dynamics from 'dynamics.js';
+import React, { Component } from 'react';
 import Card from 'components/Cards/Card';
 import FloatingCardWrap from 'components/Cards/FloatingCardWrap';
 import classNames from 'classnames/bind';
@@ -31,6 +30,6 @@ class SingleBookNav extends Component {
       </div>
     );
   }
-};
+}
 
 export default SingleBookNav;

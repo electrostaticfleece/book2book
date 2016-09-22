@@ -15,7 +15,7 @@ describe('Book Actions', () => {
   describe('Thunk action creators', () => {
     let sandbox;
 
-    const { resData, testActions, bookObj, reqData } = data;
+    const { resData, testActions, bookObj } = data;
 
     const initialState = {
       books: {

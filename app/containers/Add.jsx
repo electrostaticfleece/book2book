@@ -1,11 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
 import { getBook, changeBook, postBook } from 'actions/books';
 import { typing, clearTyping } from 'actions/input';
 import styles from 'css/components/addBook';
 import SearchForm from 'components/Search/SearchForm';
-import SingleBook from 'components/SingleBook/SingleBook'
+import SingleBook from 'components/SingleBook/SingleBook';
 
 const cx = classNames.bind(styles);
 
@@ -34,15 +34,15 @@ class Add extends Component {
      */
     const { changeBook, postBook } = this.props;
     const icons = [ {
-      func: (e) => { return condition(changeBook, -1); },
+      func: () => { return condition(changeBook, -1); },
       classes: {left: true, 'icon-mid': true},
       title: 'Previous Book'
     }, {
-      func: (e) => postBook(),
+      func: () => postBook(),
       classes: {plus: true, 'icon-mid': true},
       title: 'Add book to my collection'
     }, {
-      func: (e) => { return condition(changeBook, 1); },
+      func: () => { return condition(changeBook, 1); },
       classes: {right: true, 'icon-mid': true},
       title: 'Next Book'
     }];
@@ -75,7 +75,7 @@ class Add extends Component {
           books = { books }
         />
       </div>
-    )
+    );
   }
 }
 

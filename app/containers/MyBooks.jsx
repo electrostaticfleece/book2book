@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
 import styles from 'css/components/myBooks';
@@ -52,13 +52,13 @@ class MyBooks extends Component {
       </div>
     );
   }
-};
+}
 
 function mapStateToProps({books, user}) {
   return {
     user,
     books
   };
-};
+}
 
 export default connect(mapStateToProps, {changeViewToSingle, deleteBook})(MyBooks);

@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import dynamics from 'dynamics.js';
+import React, { Component } from 'react';
 import Card from 'components/Cards/Card';
 import classNames from 'classnames/bind';
 import styles from 'css/components/singleBookInfo';
@@ -25,6 +24,6 @@ class SingleBookInfo extends Component {
       </div>
     );
   }
-};
+}
 
 export default SingleBookInfo;

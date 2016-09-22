@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
 import { mountMultiBook, changeMultiBookWidth } from 'actions/client';
@@ -15,7 +15,7 @@ class MultiBook extends Component {
     this.hanldeMouseLeave = this.handleMouseLeave.bind(this);
     this.state = {
       selected: null
-    }
+    };
   }
 
   componentDidMount() {
@@ -35,7 +35,7 @@ class MultiBook extends Component {
     const { changeMultiBookWidth, percentOfPage } = this.props;
     const multiBookWidth =  Math.round(document.body.clientWidth * percentOfPage);
     
-    this.refs.multiBook.setAttribute("style","width:" + multiBookWidth  + 'px');
+    this.refs.multiBook.setAttribute('style','width:' + multiBookWidth  + 'px');
     changeMultiBookWidth(multiBookWidth);
   }
 
@@ -66,7 +66,7 @@ class MultiBook extends Component {
     const max = Math.floor(width/boxWidth);
     const margin = max > 0 ? (width - boxWidth*max)/2 : 0;
 
-    return this.segmentBooks(books, max).map((segment, i, arr) => {
+    return this.segmentBooks(books, max).map((segment, i) => {
       return (
         <div 
           key={i} 
@@ -75,8 +75,8 @@ class MultiBook extends Component {
         >
           { this.mapBooksToRow(segment, bookSize, icons, dimensions) }
         </div>
-      )
-    })
+      );
+    });
   }
 
   mapBooksToRow(books, bookSize, icons, dimensions) {
@@ -102,8 +102,8 @@ class MultiBook extends Component {
                 highlight: this.state.selected === book.altId, 
                 fade: this.state.selected && this.state.selected !== book.altId
               })}
-              onMouseEnter = { (e) => this.handleMouseEnter(book.altId)}
-              onMouseLeave = { (e) => this.handleMouseLeave()}
+              onMouseEnter = { () => this.handleMouseEnter(book.altId)}
+              onMouseLeave = { () => this.handleMouseLeave()}
             >
               { this.mapIconsToBook(icons, book) }
             </div>
@@ -119,7 +119,7 @@ class MultiBook extends Component {
       return (
         <i 
           key={i} 
-          onClick={(e) => icon.func(book) } 
+          onClick={() => icon.func(book) } 
           className={cx({...icon.classes, [iconClass]: true})}> 
         </i>
       );
@@ -135,12 +135,12 @@ class MultiBook extends Component {
       </div>
     );
   }
-};
+}
 
 function mapStateToProps({client}) {
   return {
     client
   };
-};
+}
 
 export default connect(mapStateToProps, {mountMultiBook, changeMultiBookWidth})(MultiBook);

@@ -5,11 +5,11 @@ export function changeMultiBookWidth(data) {
     type: types.MULTIBOOK_WIDTH_CHANGE,
     payload: data
   };
-};
+}
 
 export function mountMultiBook(data) {
   return {
     type: types.MOUNT_MULTIBOOK,
     paload: data
   };
-};
+}
