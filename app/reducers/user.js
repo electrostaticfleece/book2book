@@ -6,10 +6,10 @@ const isLogin = (
   action
 ) => {
   switch (action.type) {
-    case types.TOGGLE_LOGIN_MODE:
-      return !state;
-    default:
-      return state;
+  case types.TOGGLE_LOGIN_MODE:
+    return !state;
+  default:
+    return state;
   }
 };
 
@@ -18,18 +18,18 @@ const message = (
   action
 ) => {
   switch (action.type) {
-    case types.TOGGLE_LOGIN_MODE:
-    case types.MANUAL_LOGIN_USER:
-    case types.SIGNUP_USER:
-    case types.LOGOUT_USER:
-    case types.LOGIN_SUCCESS_USER:
-    case types.SIGNUP_SUCCESS_USER:
-      return '';
-    case types.LOGIN_ERROR_USER:
-    case types.SIGNUP_ERROR_USER:
-      return action.message;
-    default:
-      return state;
+  case types.TOGGLE_LOGIN_MODE:
+  case types.MANUAL_LOGIN_USER:
+  case types.SIGNUP_USER:
+  case types.LOGOUT_USER:
+  case types.LOGIN_SUCCESS_USER:
+  case types.SIGNUP_SUCCESS_USER:
+    return '';
+  case types.LOGIN_ERROR_USER:
+  case types.SIGNUP_ERROR_USER:
+    return action.message;
+  default:
+    return state;
   }
 };
 
@@ -38,19 +38,19 @@ const isWaiting = (
   action
 ) => {
   switch (action.type) {
-    case types.MANUAL_LOGIN_USER:
-    case types.SIGNUP_USER:
-    case types.LOGOUT_USER:
-      return true;
-    case types.LOGIN_SUCCESS_USER:
-    case types.SIGNUP_SUCCESS_USER:
-    case types.LOGOUT_SUCCESS_USER:
-    case types.LOGIN_ERROR_USER:
-    case types.SIGNUP_ERROR_USER:
-    case types.LOGOUT_ERROR_USER:
-      return false;
-    default:
-      return state;
+  case types.MANUAL_LOGIN_USER:
+  case types.SIGNUP_USER:
+  case types.LOGOUT_USER:
+    return true;
+  case types.LOGIN_SUCCESS_USER:
+  case types.SIGNUP_SUCCESS_USER:
+  case types.LOGOUT_SUCCESS_USER:
+  case types.LOGIN_ERROR_USER:
+  case types.SIGNUP_ERROR_USER:
+  case types.LOGOUT_ERROR_USER:
+    return false;
+  default:
+    return state;
   }
 };
 
@@ -59,16 +59,16 @@ const authenticated = (
   action
 ) => {
   switch (action.type) {
-    case types.LOGIN_SUCCESS_USER:
-    case types.SIGNUP_SUCCESS_USER:
-    case types.LOGOUT_ERROR_USER:
-      return true;
-    case types.LOGIN_ERROR_USER:
-    case types.SIGNUP_ERROR_USER:
-    case types.LOGOUT_SUCCESS_USER:
-      return false;
-    default:
-      return state;
+  case types.LOGIN_SUCCESS_USER:
+  case types.SIGNUP_SUCCESS_USER:
+  case types.LOGOUT_ERROR_USER:
+    return true;
+  case types.LOGIN_ERROR_USER:
+  case types.SIGNUP_ERROR_USER:
+  case types.LOGOUT_SUCCESS_USER:
+    return false;
+  default:
+    return state;
   }
 };
 
@@ -77,18 +77,18 @@ const books = (
   action
 ) => {
   switch(action.type) {
-    case types.POST_BOOK_REQUEST:
-      return [...state, action.payload];
-    case types.DELETE_BOOK_REQUEST:
-    case types.POST_BOOK_FAILURE:
-      return state.filter((book, i) => i !== action.payload.index);
-    case types.DELETE_BOOK_FAILURE:
-      return [...state, action.payload.book];
-    case types.POST_BOOK_SUCCESS:
-    default:
-      return state;
+  case types.POST_BOOK_REQUEST:
+    return [...state, action.payload];
+  case types.DELETE_BOOK_REQUEST:
+  case types.POST_BOOK_FAILURE:
+    return state.filter((book, i) => i !== action.payload.index);
+  case types.DELETE_BOOK_FAILURE:
+    return [...state, action.payload.book];
+  case types.POST_BOOK_SUCCESS:
+  default:
+    return state;
   }
-}
+};
 
 const userReducer = combineReducers({
   isLogin,
