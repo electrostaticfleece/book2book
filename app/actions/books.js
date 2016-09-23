@@ -2,6 +2,7 @@ import * as types from 'types';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
 import { polyfill } from 'es6-promise';
+import { createHandleRes, createRequestHandler, createActionCreators } from 'actions/auxiliary';
 
 polyfill();
 
@@ -60,101 +61,11 @@ function makeBookRequest(method, config, api = '/books') {
   return axios[method](api, config);
 }
 
-function underscoreLeft(string) {
-  return '_' + string;
-}
+//Instantiate our request handler. 
 
-function createTypeName(statusName) {
-  return statusName.replace(/[A-Z]/g, underscoreLeft).toUpperCase();
-}
+const handleRequests = createRequestHandler(makeBookRequest);
 
-//Creates a function that will handle a request based on whether a status is equal to http status code. 
-
-function createHandleRes(code, actionCreator) {
-  return function(res) {
-    if(res.status === code) {
-      return actionCreator(res);
-    }
-  };
-}
-
-/*
- * Standardizes and simplifies requests by dispatching three actions that correspond
- * to the request lifecycle (optimistic, success, and failure). If additional dispatches 
- * are needed, simply wrap them in the function corresponding to the dispatch and return 
- * the final action creator that needs to be fired for that lifecycle function. 
- *
- * @dispatch: The dispatch from your thunk 
- * @optimistic: An optimistic action creator or function that returns an action creator 
- * to be fired before the request
- * @config: Configuration for your request. It must include a type. Options and 
- * and an api string are optional
- * @handleRes: An action creator or function that returns an action creator to be fired after
- * a response is recieved
- * @failire: An action creator of function that returns an action creator to be fired after
- * a response fails
- */
-
-function handleRequests(dispatch, optimistic, config, handleRes, failure){
-
-  dispatch(optimistic());
-
-  if(handleRes && failure && config.type) {
-    return makeBookRequest(config.type, config.options, config.api)
-      .then((res) => {
-        dispatch(handleRes(res));
-      })
-      .catch((err) => {
-        dispatch(failure(err));
-      });
-  }
-}
-
-/*
- * Creates a generic action creator with a type and a payload. Types are uppercase with an 
- * underscore between words. The payload is a generic payload that references the data argument. 
- *
- * @status : The suffix you wish to append to the name of your action
- * @name : The name of your action 
- * @writeTo: The object actions will be written to
- * @types: The types object you wish to reference
- * @namingFunc: A function used to generate type names
- */
-
-function createActionCreator(status, name, writeTo, types, namingFunc) {
-  const statusName = name + status;
-  const typeName = namingFunc(statusName);
-  writeTo[statusName] = function(data) {
-    return {
-      type: types[typeName],
-      payload: data
-    };
-  };
-}
-
-/*
- * Takes a pairing of actionNames and statuses and writes an action to the actions object for each 
- * status/action combination 
- *
- * @pairs : An object with two properties (both arrays) named actionNames & statuses
- * @actions: An object to write actions to. Defaults to an empty object
- */
-
-function createActionCreators(pairs, actions = {}) {
-  pairs.forEach((pair) => {
-    const {actionNames, statuses} = pair;
-
-    actionNames.forEach((name) => {
-
-      statuses.forEach((status) => {
-        createActionCreator(status, name, actions, types, createTypeName);
-      });
-    });
-  });
-  return actions;
-}
-
-//A necessary evil of optimization
+//Export all of our non async actions
 
 export const { 
   getBookRequest, 
@@ -174,7 +85,7 @@ export const {
   clearResults,
   resetView,
   viewSingleBook
-} = createActionCreators(pairs);
+} = createActionCreators(pairs, {}, types);
 
 //THUNK ACTION CREATORS
 
@@ -188,8 +99,6 @@ export function getBook(startIndex = 0, newSearch = false) {
       const successAction = newSearch ? getNewBookSuccess : getBookSuccess;
       const api = createAPIString(query, startIndex);
       const message = 'Unfortunately, your query failed. Please check your query and try again';
-
-      const optimistic = () => getBookRequest(query);
       const config = {type: 'get', options: googleConfig, api};
       const handleResponse = (res) => {
         const {data: { items } } = res;
@@ -204,6 +113,8 @@ export function getBook(startIndex = 0, newSearch = false) {
           query: query
         });
       };
+
+      const optimistic = () => getBookRequest(query);
       const success = createHandleRes(200, handleResponse);
       const failure = () => getBookFailure({message, query});
 
@@ -273,7 +184,7 @@ export function deleteBook(book) {
 
     if(typeof book.altId === 'string') {
       const bookIndex = books.lastIndexOf(book);
-      const optimisticData = {data: book, index: bookIndex};
+      const optimisticData = {book, index: bookIndex};
       const config = {type: 'delete', options: {data: book}};
       const message = 'Unfortunately, we could not delete your book. Please try again at a later time.';
 

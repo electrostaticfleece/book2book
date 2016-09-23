@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
-import styles from 'css/components/myBooks';
+import styles from 'css/pages/myBooks';
 import { changeViewToSingle, deleteBook } from 'actions/books';
 import MultiBook from 'components/MultiBook';
 

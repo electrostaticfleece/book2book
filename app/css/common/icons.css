@@ -4,6 +4,7 @@
 
 .fa-3x {
   composes: fa-3x from '../../../node_modules/font-awesome/css/font-awesome.css';
+  margin-top: -3.42px;
 }
 
 .fa-2x {
@@ -14,6 +15,26 @@
   composes: fa-times-circle-o from '../../../node_modules/font-awesome/css/font-awesome.css';
 }
 
+.accept {
+  composes: fa fa-check from '../../../node_modules/font-awesome/css/font-awesome.css';
+}
+
+.trade {
+  composes: fa-exchange from '../../../node_modules/font-awesome/css/font-awesome.css';
+}
+
 .view {
   composes: fa-eye from '../../../node_modules/font-awesome/css/font-awesome.css';
+}
+
+.circle3x {
+  width: 41.16px;
+  height: 41.16px;
+  border-radius: 50%;
+  background-color: transparent;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.circle3x:active {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }

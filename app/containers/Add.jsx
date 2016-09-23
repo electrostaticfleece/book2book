@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
-import { getBook, changeBook, postBook } from 'actions/books';
+import { getBook, changeBook, postBook, resetView } from 'actions/books';
 import { typing, clearTyping } from 'actions/input';
-import styles from 'css/components/addBook';
+import styles from 'css/pages/addBook';
 import SearchForm from 'components/Search/SearchForm';
 import SingleBook from 'components/SingleBook/SingleBook';
 
@@ -16,9 +16,10 @@ class Add extends Component {
   }
 
   componentDidMount() {
-    const {clearTyping} = this.props;
+    const {clearTyping, resetView} = this.props;
     //Clear any typing from a previous search
     clearTyping();
+    resetView();
     //Incase we come from a page where the scroll bar is positioned
     window.scrollTo(0, 0);
 
@@ -49,13 +50,15 @@ class Add extends Component {
 
     return icons.map((icon, i) => {
       return (
-        <i
-          onClick = { icon.func }
-          className = {cx(icon.classes)}
-          title = { icon.title }
-          key = {i}
-        >
-        </i>
+        <div className={cx('circle')} >
+          <i
+            onClick = { icon.func }
+            className = {cx(icon.classes)}
+            title = { icon.title }
+            key = {i}
+          >
+          </i>
+        </div>
       );
     });
   }
@@ -87,4 +90,4 @@ function mapStateToProps({user, input, books}) {
   };
 }
 
-export default connect(mapStateToProps, {getBook, typing, changeBook, postBook, clearTyping})(Add);
+export default connect(mapStateToProps, {getBook, typing, changeBook, postBook, clearTyping, resetView})(Add);

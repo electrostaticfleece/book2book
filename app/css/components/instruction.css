@@ -1,0 +1,37 @@
+@import 'common/typography';
+
+.instruction {
+  display: flex;
+  margin-left: 80px;
+  align-items: center;
+}
+
+.header {
+  font-size: 48px;
+  padding-bottom: 7px;
+  color: #01A9D5;
+}
+
+.number {
+  min-width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 5px solid #01A9D5;
+  background-color: transparent;
+  color: black;
+  text-align:center;
+  margin-right: 30px;
+}
+
+.number div {
+  font-size: 48px;
+  font-family: var(--headingFont);
+  font-weight: bold;
+  margin-top: 7px;
+  margin-right: 3px;
+  color: #01A9D5;
+}
+
+.instructionBody {
+
+}

@@ -4,9 +4,12 @@
 }
 
 /* Icons */ 
-
 .icon-mid {
   composes: fa fa-3x from '../common/icons.css';
+}
+
+.circle {
+  composes: circle3x from '../common/icons.css';
 }
 
 .icon-mid:hover {

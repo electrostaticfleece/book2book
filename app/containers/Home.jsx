@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
 import { getAvailableBooks, changeViewToSingle } from 'actions/books';
-import styles from 'css/components/home';
+import styles from 'css/pages/home';
 import MultiBook from 'components/MultiBook';
 
 const cx = classNames.bind(styles);
@@ -21,15 +21,15 @@ class Home extends Component {
   viewButton() {
     const { changeViewToSingle } = this.props;
     return {
-      func: (book) => changeViewToSingle(book),
+      func: () => {},
       classes: {view: true, icon: true}
     };
   }
 
-  static need = [ () => { console.log('Firing'); return getAvailableBooks(14) } ]
+  static need = [ () => { return getAvailableBooks(14) } ]
 
   render() {
-    const { books } = this.props;
+    const { books, changeViewToSingle } = this.props;
     return (
       <div className={cx('home')}>
         <div className={cx('hero')}>
@@ -37,7 +37,7 @@ class Home extends Component {
           </div>
           <div className={cx('heading')}>
             <h1>Explore New Worlds!</h1>
-            <p>Your next literary adventure begins here.</p>
+            <p>Your next literary adventure is one trade away.</p>
           </div>
         </div>
         <div className={cx('bookView')}>
@@ -48,6 +48,7 @@ class Home extends Component {
             dimensions = {{width: 200, margin: 10}}
             percentOfPage = {1}
             highlight = {true}
+            wrap = {{click: (book) => changeViewToSingle(book), style: {pointer: true}}}
           />
         </div>
       </div>

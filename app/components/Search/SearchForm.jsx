@@ -15,7 +15,7 @@ class SearchForm extends Component {
 
   findBook() {
     const { status, getBook } = this.props;
-    if(typeof status === 'undefined' || status === 'Success') {
+    if(typeof status === 'undefined' || status === 'Success' || status === 'Failed') {
       getBook(0, true);
     }
   }
@@ -46,7 +46,7 @@ class SearchForm extends Component {
           type={'search'} 
           changeEvent={this.typing} 
           id={'addBookQuery'}
-          placeholder={'Search for a book to add to your collection'}
+          placeholder={'Search for a book you own to add to your collection'}
         />
         <div className={cx('searchWrap')} >
           <i 

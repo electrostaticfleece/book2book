@@ -10,9 +10,10 @@ class Card extends Component {
   }
 
   render() {
-    const { cardStyles } = this.props;
+    const { cardStyles, styles } = this.props;
+    const style = styles ? styles: null;
     return (
-      <div className={cx(cardStyles.card)} >
+      <div className={cx(cardStyles.card)} style={style} >
         { cardStyles.background ? <div className={cx(cardStyles.background)}></div> : null}
         {this.props.children}
      </div>

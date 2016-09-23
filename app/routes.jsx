@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import MyBooks from 'containers/MyBooks';
 import ViewBook from 'containers/ViewBook';
+import ProposeTrade from 'containers/ProposeTrade';
 import Home from 'containers/Home';
 import App from 'containers/App';
 import Add from 'containers/Add';
@@ -12,6 +13,17 @@ import Add from 'containers/Add';
  * state from the store after it has been authenticated.
  */
 export default (store) => {
+
+  const multipleFunc = (...funcs) => {
+
+    return (nextState, replace, callback) => {
+      funcs.forEach((func, i, arr) => {
+        const cb = (i === arr.length - 1) ? callback : () => {};
+        func(nextState, replace, cb);
+      });
+    };
+  };
+
   const requireAuth = (nextState, replace, callback) => {
     const { user: { authenticated }} = store.getState();
     if (!authenticated) {
@@ -49,6 +61,7 @@ export default (store) => {
       <Route path="addBook" component={Add} onEnter={requireAuth} />
       <Route path="myBooks" component={MyBooks} onEnter={requireAuth} />
       <Route path="viewBook" component={ViewBook} onEnter={requireViewBook}/>
+      <Route path="proposetrade" component={ProposeTrade} onEnter={multipleFunc(requireAuth)} />
     </Route>
   );
 };

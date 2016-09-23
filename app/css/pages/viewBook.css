@@ -1,0 +1,75 @@
+@import 'common/typography';
+
+.icon-mid {
+  composes: fa fa-3x from '../common/icons.css';
+  cursor: pointer;
+}
+
+.icon-sm {
+  composes: fa fa-2x from '../common/icons.css';
+  cursor: pointer;
+}
+
+.delete {
+  composes: delete from '../common/icons.css';
+  color: white;
+}
+
+.trade {
+  composes: trade from '../common/icons.css';
+  color: white;
+  font-size: 24px;
+  margin-top: 8px;
+
+}
+
+.circle {
+  composes: circle3x from '../common/icons.css';
+  text-align: center;
+  cursor: pointer;
+}
+
+.circle:hover .trade {
+  color: white;
+}
+
+.fill {
+  background-color: #EA2853;
+}
+
+.fill:hover {
+  background-color: #026BFE;
+}
+
+.delete:hover {
+  color: red;
+}
+
+.text-container {
+  text-align: center;
+}
+
+.text {
+  color: white;
+  width: 300px;
+}
+
+.link {
+  margin: 10px;
+  text-align: center;
+  border: 2px solid #01A9D5;
+  padding: 7px;
+  width: 200px;
+  border-radius: 25px;
+  display: inline-block;
+  background-color: rgba(0,0,0, 0);
+  font-family: var(--headingFont);
+  font-weight: bold;
+  color: #01A9D5;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.link:hover {
+  background-color: rgba(0, 0, 0, 0.75);
+}
