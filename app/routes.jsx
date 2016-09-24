@@ -61,7 +61,7 @@ export default (store) => {
       <Route path="addBook" component={Add} onEnter={requireAuth} />
       <Route path="myBooks" component={MyBooks} onEnter={requireAuth} />
       <Route path="viewBook" component={ViewBook} onEnter={requireViewBook}/>
-      <Route path="proposetrade" component={ProposeTrade} onEnter={multipleFunc(requireAuth)} />
+      <Route path="proposeTrade" component={ProposeTrade} onEnter={requireAuth} />
     </Route>
   );
 };

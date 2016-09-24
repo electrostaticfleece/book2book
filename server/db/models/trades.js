@@ -1,17 +1,24 @@
 import crypto from 'crypto';
 
 function setID(trade) {
-  trade.id = crypto.randomBytes(20).toString('hex');
+  trade.tradeID = crypto.randomBytes(20).toString('hex');
 }
 
 export default (sequelize, DataTypes) => {
   const Trade = sequelize.define('Trade', {
     tradeID: {
       type: DataTypes.STRING,
-      allowNull: false,
       primaryKey:true 
     },
     status: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    requestedby: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    decisionby: {
       type: DataTypes.STRING,
       allowNull: false
     }

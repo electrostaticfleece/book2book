@@ -113,7 +113,7 @@ const existing = (
   switch(action.type) {
   case types.GET_ALL_TRADES_SUCCESS:
     return action.payload;
-  case types.PROPOSE_TRADE_REQUEST:
+  case types.PROPOSE_TRADE_SUCCESS:
     return [...state, action.payload];
   case types.PROPOSE_TRADE_FAILURE:
     return state.filter((trade) => trade.id !== action.payload.id);
@@ -158,15 +158,15 @@ const trades = (
   switch(action.type) {
   case types.SELECT_REQUESTED_BOOK:
   case types.SELECT_USER_BOOK:
-  case types.PROPOSE_TRADE_SUCCESS:
+  case types.PROPOSE_TRADE_REQUEST:
+  case types.PROPOSE_TRADE_FAILURE:
     return {...state, potential: potential(state.potential, action)};
   case types.GET_ALL_TRADES_SUCCESS:
   case types.ACCEPT_TRADE_REQUEST:
   case types.REJECT_TRADE_REQUEST:
   case types.DECISION_FAILED_TO_WRITE:
     return {...state, existing: (state.existing, action)};
-  case types.PROPOSE_TRADE_REQUEST:
-  case types.PROPOSE_TRADE_FAILURE:
+  case types.PROPOSE_TRADE_SUCCESS:
     return {potential: potential(state.potential, action), existing: existing(state.existing, action)};
   default:
     return state;

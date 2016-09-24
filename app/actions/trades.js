@@ -36,7 +36,7 @@ const pairs = [{
 }];
 
 
-function makeTradeRequest(method, config, api = '/trade') {
+function makeTradeRequest(method, config, api = '/trades') {
   return axios[method](api, config);
 }
 
@@ -56,6 +56,10 @@ export const {
 
 export function proposeTrade() {
   return (dispatch, getState) => {
-    
-  }
+    const { user: { trades: { potential } } } = getState();
+    const config = {type: 'post', options: {data: potential}};
+    const success = createHandleRes(200, (res) => { return proposeTradeSuccess(res.data.trade); });
+
+    handleRequests(dispatch, proposeTradeRequest, config, success, proposeTradeFailure);
+  };
 }

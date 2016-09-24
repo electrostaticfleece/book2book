@@ -109,7 +109,8 @@ class Instructions extends Component {
 
   render() {
     const { state: { stage } } = this;
-    const styles = this.getStyles(stage)
+    const styles = this.getStyles(stage);
+    const { proposeTrade } = this.props;
     return (
       <div className={cx('body')}>
         <Instruction 
@@ -133,7 +134,7 @@ class Instructions extends Component {
             { stage !== 2 ?
                 <button 
                   className={cx('button')} 
-                  onClick = { stage < 3 ? () => { this.changeStage(1); window.scrollTo(0, 0); } : null}
+                  onClick = { stage < 3 ? () => { this.changeStage(1); window.scrollTo(0, 0); } : proposeTrade}
                   >
                     { stage < 3 ? 'next' : 'submit' }
                 </button> :

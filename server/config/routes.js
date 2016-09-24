@@ -47,5 +47,9 @@ export default (app) => {
     app.get('/books/:limit', controllers.Book.getAllBooks);
   }
 
+  if(controllers && controllers.Trade) {
+    app.post('/trades', controllers.Trade.createTrade);
+  }
+
 
 };
