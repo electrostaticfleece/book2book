@@ -95,12 +95,8 @@ const status = (
   action
 ) => {
   switch(action.type) {
-  case types.ACCEPT_TRADE_REQUEST:
-    return 'accepted';
-  case types.REJECT_TRADE_REQUEST:
-    return 'rejected';
-  case types.DECISION_FAILED_TO_WRITE:
-    return 'pending';
+  case types.UPDATE_STATUS:
+    return action.payload.status;
   default: 
     return state;
   }
@@ -115,13 +111,9 @@ const existing = (
     return action.payload;
   case types.PROPOSE_TRADE_SUCCESS:
     return [...state, action.payload];
-  case types.PROPOSE_TRADE_FAILURE:
-    return state.filter((trade) => trade.id !== action.payload.id);
-  case types.ACCEPT_TRADE_REQUEST:
-  case types.REJECT_TRADE_REQUEST:
-  case types.DECISION_FAILED_TO_WRITE:
+  case types.UPDATE_STATUS:
     return state.map((trade) => {
-      return trade.id === action.payload.id ? {...trade, status: status(trade.status, action)} : {...trade};
+      return trade.tradeID === action.payload.tradeID ? {...trade, status: status(trade.status, action)} : {...trade};
     });
   default:
     return state;
@@ -151,7 +143,7 @@ const potential = (
 const trades = (
   state = {
     potential: {},
-    existing: {}
+    existing: []
   },
   action
 ) => {
@@ -161,11 +153,8 @@ const trades = (
   case types.PROPOSE_TRADE_REQUEST:
   case types.PROPOSE_TRADE_FAILURE:
     return {...state, potential: potential(state.potential, action)};
-  case types.GET_ALL_TRADES_SUCCESS:
-  case types.ACCEPT_TRADE_REQUEST:
-  case types.REJECT_TRADE_REQUEST:
-  case types.DECISION_FAILED_TO_WRITE:
-    return {...state, existing: (state.existing, action)};
+  case types.UPDATE_STATUS:
+    return {...state, existing: existing(state.existing, action)};
   case types.PROPOSE_TRADE_SUCCESS:
     return {potential: potential(state.potential, action), existing: existing(state.existing, action)};
   default:
@@ -173,7 +162,42 @@ const trades = (
   }
 };
 
+const userId = (
+  state = null,
+  action
+) => {
+  switch(action.type) {
+  default:
+    return state;
+  }
+};
+
+const info = (
+  state = {},
+  action
+) => {
+  const keys = Object.keys(action.payload);
+  return keys.reduce((prev, next) => {
+    prev[next] = action.payload[next];
+    return prev;
+  }, {...state});
+};
+
+const userInfo = (
+  state = {},
+  action
+) => {
+  switch(action.type) {
+  case types.UPDATE_INFO:
+    return info(state, action);
+  default:
+    return state;
+  }
+};
+
 const userReducer = combineReducers({
+  userInfo,
+  userId,
   isLogin,
   isWaiting,
   authenticated,

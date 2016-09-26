@@ -13,6 +13,17 @@ const clientConfig = {
   port: process.env.PORT || '5000'
 };
 
+function getUserProps(req, need, defaultVal) {
+  return req.user && req.user[need] ? req.user[need] : defaultVal;
+}
+
+function formatTrades(trades) {
+  return trades.map((trade) => {
+    const data = trade.dataValues;
+    return {...data, updatedAt: data.updatedAt.toISOString(), createdAt: data.createdAt.toISOString()}
+  });
+}
+
 // configure baseURL for axios requests (for serverside API calls)
 axios.defaults.baseURL = `http://${clientConfig.host}:${clientConfig.port}`;
 
@@ -22,16 +33,31 @@ axios.defaults.baseURL = `http://${clientConfig.host}:${clientConfig.port}`;
  * and pass it into the Router.run function.
  */
 export default function render(req, res) {
+  const { user } = req; 
   const authenticated = req.isAuthenticated ? req.isAuthenticated() : null;
-  const usersBooks = req.user && req.user.Books ? req.user.Books : [];
+  const userId = getUserProps(req, 'id', null);
+  const userInfo = user ? {
+    city: user.city, 
+    state: user.state, 
+    firstName: user.firstName, 
+    lastName: user.lastName
+  } : {};
+  const usersBooks = getUserProps(req, 'Books', []);
+  const userTrades = formatTrades(getUserProps(req, 'Trades', []));
   const history = createMemoryHistory();
   const store = configureStore({
     user: {
+      userInfo,
       authenticated,
+      userId,
       isWaiting: false,
       message: '',
       isLogin: true,
-      books: usersBooks
+      books: usersBooks,
+      trades: {
+        existing: userTrades,
+        potential: {}
+      }
     }
   }, history);
   const routes = createRoutes(store);

@@ -15,6 +15,7 @@ export default (app) => {
 
   if(controllers && controllers.User){
     app.get('/logout', controllers.User.logOut, saveSession);
+    app.put('/user', controllers.User.updateSettings);
   }
 
   if (passportConfig && passportConfig.google) {
@@ -49,6 +50,7 @@ export default (app) => {
 
   if(controllers && controllers.Trade) {
     app.post('/trades', controllers.Trade.createTrade);
+    app.put('/trades', controllers.Trade.updateTrade);
   }
 
 

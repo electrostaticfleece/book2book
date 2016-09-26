@@ -1,0 +1,30 @@
+@import 'common/typography';
+.trades {
+  position: relative;
+}
+
+.trades table {
+  margin: auto auto;
+}
+
+.trades th, .trades td {
+  color: #ccc;
+  font-family: var(--bodyFont);
+  padding: 10px 30px;
+}
+
+.trades td {
+  font-weight: 400;
+}
+
+.trades th {
+  font-weight: 700;
+}
+
+.trades .declined {
+  color: red;
+}
+
+.trades .accepted {
+  color: green;
+}

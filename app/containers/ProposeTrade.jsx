@@ -21,14 +21,11 @@ class ProposeTrade extends Component {
     const { user, selectUserBook, proposeTrade } = this.props;
     return (
       <div className={cx('content')}>
-        { typeof user.trades.potential !== 'undefined' && typeof user.trades.potential.requestedBook !== 'undefined' ?
-          <Instructions 
-            user = {user}
-            selectBook = { selectUserBook }
-            proposeTrade = { proposeTrade }
-          /> :
-          null
-        }
+        <Instructions 
+          user = {user}
+          selectBook = { selectUserBook }
+          proposeTrade = { proposeTrade }
+        /> 
       </div>
     );
   }

@@ -9,9 +9,7 @@ polyfill();
 const singleStatus = [
   'selectRequestedBook',
   'selectUserBook',
-  'getAllTradesSuccess',
-  'acceptTradeRequest',
-  'rejectTradeReqiest',
+  'updateStatus',
   'decisionFailedToWrite',
 ];
 
@@ -45,9 +43,7 @@ const handleRequests = createRequestHandler(makeTradeRequest);
 export const {
   selectRequestedBook,
   selectUserBook,
-  getAllTradesSuccess,
-  acceptTradeRequest,
-  rejectTradeRequest,
+  updateStatus,
   decisionFailedToWrite,
   proposeTradeRequest,
   proposeTradeSuccess,
@@ -58,8 +54,34 @@ export function proposeTrade() {
   return (dispatch, getState) => {
     const { user: { trades: { potential } } } = getState();
     const config = {type: 'post', options: {data: potential}};
-    const success = createHandleRes(200, (res) => { return proposeTradeSuccess(res.data.trade); });
+    const success = createHandleRes(200, (res) => {
+      const { data: { trade: { meta, requestedBook, userBook }}} = res;
+      return proposeTradeSuccess({
+        ...meta, 
+        Books: [
+          requestedBook, 
+          userBook
+        ]
+      }); 
+    });
+    const optimistic = () => { browserHistory.push('myTrades'); return proposeTradeRequest; };
 
-    handleRequests(dispatch, proposeTradeRequest, config, success, proposeTradeFailure);
+    handleRequests(dispatch, optimistic, config, success, proposeTradeFailure);
+  };
+}
+
+export function changeStatus(trade, status) {
+  return (dispatch) => {
+    const allowedStatus = ['accepted', 'declined', 'canceled', 'pending'];
+
+    if(typeof status === 'string' && allowedStatus.some((allowed) => allowed === status)){
+      const { tradeID } = trade;
+      const optimistic = () => { return updateStatus({status, tradeID: trade.tradeID}); };
+      const config = {type: 'put', options: {data: {status, tradeID}}};
+      const success = createHandleRes(200, () => { return false });
+      const failure = () => { return updateStatus({status: 'pending', tradeID: trade.tradeID}); };
+
+      handleRequests(dispatch, optimistic, config, success, failure);
+    }
   };
 }

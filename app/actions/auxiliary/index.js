@@ -40,7 +40,10 @@ export function createRequestHandler(requestFunc) {
     if(handleRes && failure && config.type) {
       return requestFunc(config.type, config.options, config.api)
         .then((res) => {
-          dispatch(handleRes(res));
+          const successAction = handleRes(res);
+          if(successAction){
+            dispatch(successAction);
+          }
         })
         .catch((err) => {
           dispatch(failure(err));

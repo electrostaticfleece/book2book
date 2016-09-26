@@ -16,14 +16,15 @@
 
 .search-icon {
   composes: fa-search from '../../../node_modules/font-awesome/css/font-awesome.css';
-  color: white;
-  padding-top: 7px;
+  color: #01A9D5;
+  padding-top: 6px;
   padding-left: 10px;
   padding-right: 10px;
+  padding-bottom: 3px;
 }
 
 .searchWrap {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #01A9D5;
 }
 
 @media (max-width: 1036px) {

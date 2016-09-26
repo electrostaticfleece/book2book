@@ -1,6 +1,8 @@
 import { polyfill } from 'es6-promise';
-
+import axios from 'axios';
 import * as types from 'types';
+import { createHandleRes, createRequestHandler } from 'actions/auxiliary';
+
 
 polyfill();
 
@@ -13,6 +15,12 @@ polyfill();
  * @param String endpoint - defaults to /login
  * @return Promise
  */
+
+function makeUserRequest(method, config, api = '/user') {
+  return axios[method](api, config);
+}
+
+const handleRequests = createRequestHandler(makeUserRequest);
 
 // Log Out Action Creators
 export function beginLogout() {
@@ -30,5 +38,24 @@ export function logoutError() {
 export function logOut() {
   return dispatch => {
     dispatch(beginLogout());
+  };
+}
+
+export function updateInfo(data) {
+  return {
+    type: types.UPDATE_INFO,
+    payload: data
+  };
+}
+
+export function updateSettings(settings) {
+  return (dispatch, getState) => {
+    const { user: { userInfo } } = getState();
+    const optimistic = () => updateInfo(settings);
+    const config = {type: 'put', options: {data: settings}};
+    const success = createHandleRes(200, () => false);
+    const failure = () => updateInfo(userInfo);
+    
+    handleRequests(dispatch, optimistic, config, success, failure);
   };
 }

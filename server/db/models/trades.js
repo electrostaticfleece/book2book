@@ -21,6 +21,12 @@ export default (sequelize, DataTypes) => {
     decisionby: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    requestedbook: {
+      type: DataTypes.STRING
+    },
+    decisionbook: {
+      type: DataTypes.STRING
     }
   }, {
     timestamps: true,

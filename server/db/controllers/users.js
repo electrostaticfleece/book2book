@@ -3,6 +3,14 @@ export default function(Models) {
   const Book = Models.Book;
   const sequelize = Models.sequelize;
 
+
+  function authenticated(user, res) {
+    if(!user) {
+      return res.status(401).send({message: 'You are not logged in. To add a book log into your account.'});
+    }
+    return null;
+  }
+
   function findById(userId) {
     if(typeof userId === 'string'){
       return User.findById(userId, {include: [Book]});
@@ -17,14 +25,6 @@ export default function(Models) {
     }
 
     throw new Error('Your argument must be an object', '.server/db/controllers/users.js');
-  }
-
-  function updateSettings(user, settings) {
-    if(typeof user === 'object' && typeof settings === 'object' && user.update && typeof user.update === 'function') {
-      return user.update(settings);
-    }
-
-    throw new Error('The user and settings must be objects. The user must have an update property', '.server/db/controllers/users.js');
   }
 
   function createUserWithToken(profile, accessToken, done) {
@@ -90,10 +90,32 @@ export default function(Models) {
     next();
   }
 
+  function updateSettings(req, res) {
+    const { body: { data } } = req;
+
+    if(authenticated(req.user, res)) {
+      return null;
+    }
+
+    User.update(data, {
+      where: {
+        id: req.user.id
+      }
+    })
+    .then((count) => {
+      if(count === 1){
+        res.status(200).send({message: 'Your settings have been successfully updated'});
+      }
+    })
+    .catch(() => {
+      res.status(500).send({message: 'Something went wrong. We could not update your settings'});
+    });
+  }
+
   return {
+    updateSettings,
     findById,
     findOne,
-    updateSettings,
     createUserWithToken,
     attachGoogleAccount,
     deleteAccount,

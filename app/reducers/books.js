@@ -39,6 +39,7 @@ const requests = (
   case types.GET_NEW_BOOK_SUCCESS:
   case types.GET_AVAILABLE_BOOKS_SUCCESS:
   case types.VIEW_SINGLE_BOOK:
+  case types.ADD_BOOKS:
     return {
       ...state, 
       status: 'Success', 

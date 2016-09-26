@@ -17,38 +17,74 @@ export default function(Models){
       return null;
     }
 
-    User.findAll({
-      include: [{
-        model: Book,
-        where: {altId: data.requestedBook.altId}
-      }]})
-    .then((user) => {
+    sequelize.transaction((transaction) => {
+      return User.findAll({
+        include: [{
+          model: Book,
+          where: {altId: data.requestedBook.altId}
+        }], transaction})
+        .then((user) => {
+          const val = Math.floor((user.length*Math.random()));
 
-      const val = Math.floor((user.length*Math.random()));
+          return Trade.create({
+            status: 'pending',
+            requestedby: req.user.id,
+            decisionby: user[val].id,
+            requestedbook: data.requestedBook.altId,
+            decisionbook: data.userBook.altId
+          }, {transaction})
+          .then((trade) => {
+            return trade.addUsers([
+              req.user.id, 
+              user[val].id
+            ], {transaction})
+            .then(() =>{
+              return trade.addBooks([
+                data.requestedBook.altId, 
+                data.userBook.altId
+              ], {transaction})
+              .then(() => {
+                return trade;
+              })
+              .then((trade) => {
+                const resObj = {meta: trade, requestedBook: data.requestedBook, userBook: data.userBook};
+                res.status(200).send({trade: resObj});
+              });
+            });
+          });
+        });
+    })
+    .catch(() => {
+      res.status(500).send({message: 'There was an error adding your trade to the database.'});
+      return null;
+    });
+  }
 
-      return Trade.create({
-        status: 'pending',
-        requestedby: req.user.id,
-        decisionby: user[val].id,
-      })
-      .then((trade) => {
-        trade.addUsers([req.user.id, user[val].id]);
-        trade.addBooks([data.requestedBook.altId, data.userBook.altId]);
-        return trade;
-      })
-      .then((trade) => {
-        const resObj = {meta: trade, requestedBook: data.requestedBook, userBook: data.userBook};
-        res.status(200).send({trade: resObj});
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).send({message: 'There was an error adding your trade to the database.'});
-        return null;
-      });
+  function updateTrade(req, res){
+    const { body: {data: { status, tradeID }} } = req;
+    if(authenticated(req.user, res)) {
+      return null;
+    }
+
+    Trade.update({
+      status: status
+    }, {
+      where: {
+        tradeID: tradeID
+      }
+    })
+    .then((count) => {
+      if(count > 0 ) {
+        res.status(200).send({message: 'Your trade has been successfully updated!'});
+      }
+    })
+    .catch(()=> {
+      res.status(500).send({message: 'Something went wrong. We were unable to update the status of your trade'});
     });
   }
 
   return {
-    createTrade
+    createTrade,
+    updateTrade
   };
 }
