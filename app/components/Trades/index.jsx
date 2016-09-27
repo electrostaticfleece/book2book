@@ -61,7 +61,7 @@ class Trades extends Component {
             { trade.status.toUpperCase() } 
           </td>
           <td> 
-            { this.checkStatus(trade.status) ? null : (userRequested ? this.cancelTrade(trade) : this.acceptOrDecline(trade)) }
+            { this.checkStatus(trade.status) || !trade.tradeID ? null : (userRequested ? this.cancelTrade(trade) : this.acceptOrDecline(trade)) }
           </td>
         </tr>
       );

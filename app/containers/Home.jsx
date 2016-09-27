@@ -34,7 +34,6 @@ class Home extends Component {
     const height = window.innerHeigh || document.documentElement.clientHeight|| document.body.clientHeight;
     const scrollTop = window.scrollTop || window.pageYOffset;
 
-    console.log('running');
       if(height + scrollTop === this.getDocHeight()){
         const nextLength = showBooks + addToLength;
 

@@ -67,7 +67,7 @@ export default function(Models){
       return null;
     }
 
-    Trade.findAll({
+    return Trade.findAll({
       include: [{
         model: User,
         where: {
@@ -77,8 +77,7 @@ export default function(Models){
       order: [['createdAt', 'DESC']]
     })
     .then((trades) => {
-      console.log('sending trades');
-      res.status(200).send({trades});
+      return res.status(200).send({trades});
     })
     .catch(() => {
       res.status(500).send({message: 'There was an error while looking for your trades. Please try again.'});
