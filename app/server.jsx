@@ -85,6 +85,7 @@ export default function render(req, res) {
    */
   match({routes, location: req.url}, (err, redirect, props) => {
     if (err) {
+      console.log(err);
       res.status(500).json(err);
     } else if (redirect) {
       res.redirect(302, redirect.pathname + redirect.search);
@@ -121,6 +122,7 @@ export default function render(req, res) {
         `);
       })
       .catch((err) => {
+        console.log(err);
         res.status(500).json(err);
       });
     } else {

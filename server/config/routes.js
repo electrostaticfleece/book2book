@@ -45,12 +45,12 @@ export default (app) => {
   if(controllers && controllers.Book) {
     app.post('/books', controllers.Book.addBook);
     app.delete('/books', controllers.Book.removeBook);
-    app.get('/books/:limit', controllers.Book.getAllBooks);
+    app.get('/books/:limit/:offset', controllers.Book.getAllBooks);
   }
 
   if(controllers && controllers.Trade) {
     app.post('/trades', controllers.Trade.createTrade);
-    app.put('/trades', controllers.Trade.updateTrade);
+    app.put('/trades', controllers.Trade.updateTrade, controllers.Trade.findUserTrades);
   }
 
 

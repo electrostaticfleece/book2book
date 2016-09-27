@@ -9,7 +9,9 @@ export default (id, done) => {
     include: [
       Book, 
       {model: Trade, include: [Book] } 
-    ]} )
+    ],
+    order: [[Trade, 'createdAt', 'DESC']]
+  })
   .then((user) => {
     done(null, user);
   }).catch(done);

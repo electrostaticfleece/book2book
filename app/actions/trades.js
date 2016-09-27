@@ -10,7 +10,7 @@ const singleStatus = [
   'selectRequestedBook',
   'selectUserBook',
   'updateStatus',
-  'decisionFailedToWrite',
+  'decisionFailedToWrite'
 ];
 
 const singleNames = [''];
@@ -22,7 +22,8 @@ const requestStatuses = [
 ];
 
 const requestNames = [
-  'proposeTrade'
+  'proposeTrade',
+  'getAllTrades'
 ];
 
 const pairs = [{
@@ -47,12 +48,15 @@ export const {
   decisionFailedToWrite,
   proposeTradeRequest,
   proposeTradeSuccess,
-  proposeTradeFailure
+  proposeTradeFailure,
+  getAllTradesRequest,
+  getAllTradesSuccess,
+  getAllTradesFailure
 } = createActionCreators(pairs, {}, types);
 
 export function proposeTrade() {
   return (dispatch, getState) => {
-    const { user: { trades: { potential } } } = getState();
+    const { user: { trades: { potential }, userId } } = getState();
     const config = {type: 'post', options: {data: potential}};
     const success = createHandleRes(200, (res) => {
       const { data: { trade: { meta, requestedBook, userBook }}} = res;
@@ -64,7 +68,18 @@ export function proposeTrade() {
         ]
       }); 
     });
-    const optimistic = () => { browserHistory.push('myTrades'); return proposeTradeRequest; };
+    const optimistic = () => { 
+      browserHistory.push('myTrades'); 
+
+      return proposeTradeRequest({
+        requestedbook: potential.requestedBook.altId,
+        decisionbook: potential.userBook.altId,
+        Books: [potential.requestedBook, potential.userBook],
+        requestedby: userId,
+        createdAt: new Date().toISOString(),
+        status: 'pending'
+      }); 
+    };
 
     handleRequests(dispatch, optimistic, config, success, proposeTradeFailure);
   };
@@ -76,10 +91,10 @@ export function changeStatus(trade, status) {
 
     if(typeof status === 'string' && allowedStatus.some((allowed) => allowed === status)){
       const { tradeID } = trade;
-      const optimistic = () => { return updateStatus({status, tradeID: trade.tradeID}); };
-      const config = {type: 'put', options: {data: {status, tradeID}}};
-      const success = createHandleRes(200, () => { return false });
-      const failure = () => { return updateStatus({status: 'pending', tradeID: trade.tradeID}); };
+      const optimistic = () => { return updateStatus({status, tradeID}); };
+      const config = {type: 'put', options: {data: {status, tradeID, trade}}};
+      const success = createHandleRes(200, (res) => { return getAllTradesSuccess(res.data.trades) });
+      const failure = () => { return updateStatus({status: 'pending', tradeID}); };
 
       handleRequests(dispatch, optimistic, config, success, failure);
     }

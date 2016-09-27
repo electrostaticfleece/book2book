@@ -71,10 +71,12 @@ class ViewBook extends Component {
   render() {
     const { books, user: {authenticated} } = this.props;
     return (
-      <SingleBook 
-        books = {books} 
-        icons = { authenticated  ? this.tradeOrDelete : null }
-      />
+      <div className={cx('viewBook')}>
+        <SingleBook 
+          books = {books} 
+          icons = { authenticated  ? this.tradeOrDelete : null }
+        />
+      </div>
     );
   }
 }

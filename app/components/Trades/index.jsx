@@ -15,7 +15,6 @@ class Trades extends Component {
     const status = (e.target.value || e.target.text).toLowerCase();
     if(status && status !== '--'){
       changeStatus(trade, (status === 'cancel' ? 'canceled' : status));
-      console.log(status);
     }
   }
 
@@ -50,9 +49,8 @@ class Trades extends Component {
       const userRequested = userId === trade.requestedby;
       const requestedBook = Books.find((book) => book.altId === trade.requestedbook);
       const decisionBook = Books.indexOf(requestedBook) ? Books[0] : Books[1];
-      console.log(trade.status === 'declined')
       return (
-        <tr key={trade.tradeID}>
+        <tr key={trade.tradeID || 'temp'}>
           <td>{this.sliceDate(trade.createdAt)}</td>
           <td> { userRequested ? decisionBook.title : requestedBook.title }</td>
           <td> { userRequested ? requestedBook.title: decisionBook.title }</td>

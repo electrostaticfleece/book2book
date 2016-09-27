@@ -110,7 +110,11 @@ const existing = (
   case types.GET_ALL_TRADES_SUCCESS:
     return action.payload;
   case types.PROPOSE_TRADE_SUCCESS:
-    return [...state, action.payload];
+    return [action.payload, ...state.slice(1)];
+  case types.PROPOSE_TRADE_REQUEST:
+    return [action.payload, ...state];
+  case types.PROPOSE_TRADE_FAILURE: 
+    return state.slice(1);
   case types.UPDATE_STATUS:
     return state.map((trade) => {
       return trade.tradeID === action.payload.tradeID ? {...trade, status: status(trade.status, action)} : {...trade};
@@ -150,12 +154,13 @@ const trades = (
   switch(action.type) {
   case types.SELECT_REQUESTED_BOOK:
   case types.SELECT_USER_BOOK:
-  case types.PROPOSE_TRADE_REQUEST:
-  case types.PROPOSE_TRADE_FAILURE:
     return {...state, potential: potential(state.potential, action)};
   case types.UPDATE_STATUS:
+  case types.GET_ALL_TRADES_SUCCESS:
     return {...state, existing: existing(state.existing, action)};
   case types.PROPOSE_TRADE_SUCCESS:
+  case types.PROPOSE_TRADE_REQUEST:
+  case types.PROPOSE_TRADE_FAILURE:
     return {potential: potential(state.potential, action), existing: existing(state.existing, action)};
   default:
     return state;

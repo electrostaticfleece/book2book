@@ -107,6 +107,10 @@ export default function(Models) {
       dbQuery.limit = req.params.limit;
     }
 
+    if(req.params.offset) {
+      dbQuery.offset = req.params.offset;
+    }
+    
     Book.findAll(dbQuery)
     .then((books) => {
       if(books) {

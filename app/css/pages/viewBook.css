@@ -1,5 +1,9 @@
 @import 'common/typography';
 
+.viewBook {
+  margin-top: 100px;
+}
+
 .icon-mid {
   composes: fa fa-3x from '../common/icons.css';
   cursor: pointer;

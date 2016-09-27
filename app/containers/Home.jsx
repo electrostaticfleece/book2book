@@ -13,6 +13,11 @@ class Home extends Component {
     this.viewButton = this.viewButton.bind(this);
     this.getMoreBooks = this.getMoreBooks.bind(this);
     this.getDocHeight = this.getDocHeight.bind(this);
+    this.state = {
+      showBooks: 14,
+      addToLength: 14,
+      reqLength: 100
+    };
   }
 
   componentDidMount() {
@@ -24,11 +29,22 @@ class Home extends Component {
 
   getMoreBooks(){
     const { books: {search: {findBook: { data } } }, getAvailableBooks } = this.props;
+    const books = data || [];
+    const { showBooks, addToLength, reqLength } = this.state;
     const height = window.innerHeigh || document.documentElement.clientHeight|| document.body.clientHeight;
     const scrollTop = window.scrollTop || window.pageYOffset;
-    if(height + scrollTop === this.getDocHeight()){
-        getAvailableBooks(data.length + 14);
-    }
+
+    console.log('running');
+      if(height + scrollTop === this.getDocHeight()){
+        const nextLength = showBooks + addToLength;
+
+        if(books.length < nextLength && books.length === reqLength ){
+          getAvailableBooks(books.legnth + reqlength);
+        }
+        if(books.length > showBooks - addToLength){
+          this.setState({showBooks: nextLength});
+        }
+      }
   }
 
   componentWillUnmount() {
@@ -52,11 +68,11 @@ class Home extends Component {
     };
   }
 
-  static need = [ () => { return getAvailableBooks(14) } ]
+  static need = [ () => { return getAvailableBooks(100, 0, true) } ]
 
   render() {
-    const { books, changeViewToSingle } = this.props;
-    console.log(books.search.findBook.data.length);
+    const { books: {search: {findBook: { data } } }, changeViewToSingle } = this.props
+    const books = data || [];
     return (
       <div className={cx('home')}>
         <div className={cx('hero')}>
@@ -69,7 +85,7 @@ class Home extends Component {
         </div>
         <div className={cx('bookView')}>
           <MultiBook
-            books = {books.search.findBook.data}
+            books = {books.filter((book, i) => { return i < this.state.showBooks})}
             icons ={[this.viewButton()]}
             bookSize = 'small'
             dimensions = {{width: 200, margin: 10}}

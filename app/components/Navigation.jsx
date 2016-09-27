@@ -5,7 +5,6 @@ import { logOut } from 'actions/users';
 import { resetView } from 'actions/books';
 import classNames from 'classnames/bind';
 import styles from 'css/components/navigation';
-import { browserHistory } from 'react-router';
 
 const cx = classNames.bind(styles);
 
@@ -60,7 +59,7 @@ class Navigation extends Component {
   }
 
   render() {
-    const { user, logOut, routing, resetView, location} = this.props;
+    const { user, logOut, resetView, location} = this.props;
     const auth = user.authenticated;
     const pathname = location.pathname;
     return (

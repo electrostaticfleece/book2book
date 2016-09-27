@@ -60,22 +60,100 @@ export default function(Models){
     });
   }
 
-  function updateTrade(req, res){
-    const { body: {data: { status, tradeID }} } = req;
+  function findUserTrades(req, res) {
+    const { user: { id } } = req;
+
+    if(authenticated(req.user, res)){
+      return null;
+    }
+
+    Trade.findAll({
+      include: [{
+        model: User,
+        where: {
+          id: id
+        }
+      }, Book],
+      order: [['createdAt', 'DESC']]
+    })
+    .then((trades) => {
+      console.log('sending trades');
+      res.status(200).send({trades});
+    })
+    .catch(() => {
+      res.status(500).send({message: 'There was an error while looking for your trades. Please try again.'});
+    });
+  }
+
+  function updateTrade(req, res, next){
+    const { body: {data: { status, tradeID, trade }} } = req;
+
     if(authenticated(req.user, res)) {
       return null;
     }
 
-    Trade.update({
+    return Trade.update({
       status: status
     }, {
       where: {
-        tradeID: tradeID
+        tradeID: tradeID,
+        status: 'pending'
       }
     })
     .then((count) => {
-      if(count > 0 ) {
-        res.status(200).send({message: 'Your trade has been successfully updated!'});
+
+      if(count[0] !== 1 ) {
+        throw new Error('There was an error while updating your status');
+      } 
+
+      if(status === 'accepted'){
+        return Trade.update({
+          status: 'canceled'
+        }, {
+          where: {
+            tradeID: {
+              $ne: tradeID
+            },
+            status: 'pending',
+            $or: [{
+              requestedbook: trade.requestedbook,
+              decisionby: trade.decisionby
+            }, {
+              decisionbook: trade.requestedbook,
+              requestedby: trade.decisionby
+            }, {
+              requestedbook: trade.decisionbook,
+              decisionby: trade.requestedby
+            }, {
+              decisionbook: trade.decisionbook,
+              requestedby: trade.requestedby
+            }]
+          }
+        })
+        .then(() => {
+          return Book.findAll({
+            where: {
+              $or: [
+                {altId: trade.requestedbook},
+                {altId: trade.decisionbook}
+              ]
+            }
+          })
+          .then((books) => {
+            return books.forEach((book) => {
+              book.decrement('available', {by: 1})
+              .then((book) => {
+                const userId = book.altId === trade.requestedBook ? trade.decisionby : trade.requestedby;
+                book.removeUser([userId]);
+              });
+            });
+          })
+          .then(() => {
+            next();
+          });
+        });
+      } else {
+        next();
       }
     })
     .catch(()=> {
@@ -85,6 +163,7 @@ export default function(Models){
 
   return {
     createTrade,
-    updateTrade
+    updateTrade,
+    findUserTrades
   };
 }

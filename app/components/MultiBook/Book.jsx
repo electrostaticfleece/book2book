@@ -59,6 +59,7 @@ class Book extends Component {
         key={book.altId} 
         className={cx('book')} 
         style={{'marginLeft': margin, 'marginRight': margin, width: width}}
+        title={book.title}
       >
         <div className={cx({bookWrap: true})}>
           <img 
