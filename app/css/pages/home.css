@@ -34,6 +34,7 @@
 .bookView {
   margin-top: -200px;
   padding-bottom: 30px;
+  min-height: 400px;
 }
 
 @media (max-width: 600px) {
