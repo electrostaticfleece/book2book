@@ -1,4 +1,4 @@
-@import 'common/typography';
+@import '../common/typography';
 
 .navigation {
   background-color: rgba(0, 0, 0, 0.85);
