@@ -93,7 +93,6 @@ export default function(Models) {
 
   function updateSettings(req, res) {
     const { body: { data } } = req;
-    console.log(data);
     if(authenticated(req.user, res)) {
       return null;
     }
