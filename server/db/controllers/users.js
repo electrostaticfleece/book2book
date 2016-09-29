@@ -93,18 +93,18 @@ export default function(Models) {
 
   function updateSettings(req, res) {
     const { body: { data } } = req;
-
+    console.log(data);
     if(authenticated(req.user, res)) {
       return null;
     }
 
-    User.update(data, {
+    return User.update(data, {
       where: {
         id: req.user.id
       }
     })
     .then((count) => {
-      if(count === 1){
+      if(count[0] === 1){
         res.status(200).send({message: 'Your settings have been successfully updated'});
       }
     })
