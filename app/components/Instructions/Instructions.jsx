@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 import styles from 'css/components/instructions';
-import Instruction from 'components/instructions/instruction';
+import Instruction from 'components/Instructions/Instruction';
 import FloatingCardWrap from 'components/Cards/FloatingCardWrap';
 import MultiBook from 'components/MultiBook';
 import Card from 'components/Cards/Card';

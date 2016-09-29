@@ -104,7 +104,7 @@ export default function(Models) {
       }
     })
     .then((count) => {
-      if(count === 1){
+      if(count[0] === 1){
         res.status(200).send({message: 'Your settings have been successfully updated'});
       }
     })
