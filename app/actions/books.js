@@ -151,8 +151,9 @@ export function getAvailableBooks(limit = 20, offset = 0) {
     const config = {type: 'get', options: {}, api: '/books/' + (limit || '') + '/' + offset};
     const message = 'Unfortunately, we could not retrive any books from the database at this time.';
 
-    const success = createHandleRes(200, (res) => getAvailableBooksSuccess({data: res.data.books}));
-    const failure = () => getAvailableBooksFailure({message});
+    console.log('executing');
+    const success = createHandleRes(200, (res) => {console.log(res.data.books); return getAvailableBooksSuccess({data: res.data.books});});
+    const failure = () => { console.log('request failed'); return getAvailableBooksFailure({message})};
 
     return handleRequests(dispatch, getAvailableBooksRequest, config, success, failure);
   };
