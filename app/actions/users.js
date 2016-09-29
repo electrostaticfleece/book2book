@@ -50,7 +50,6 @@ export function updateSettings(settings) {
 }
 
 export function getUserChanges() {
-  console.log('User changes firing');
   return (dispatch, getState) => {
     const { client: { noLoad } } = getState();
     if(!noLoad){
