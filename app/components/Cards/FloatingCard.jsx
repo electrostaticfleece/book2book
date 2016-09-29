@@ -147,7 +147,7 @@ class FloatingCard extends Component {
           onMouseMove={ this.mouseMove }
         >
           <img 
-            src={image} 
+            src={image.replace('http', 'https')} 
             className={cx('floatingCardThumb')} 
           />
           <span 

@@ -37,16 +37,6 @@ export default (store) => {
     callback();
   };
 
-  const redirectAuth = (nextState, replace, callback) => {
-    const { user: { authenticated }} = store.getState();
-    if (authenticated) {
-      replace({
-        pathname: '/'
-      });
-    }
-    callback();
-  };
-
   const requireViewBook = (nextState, replace, callback) => {
     const { books: { viewing: { page }}} = store.getState();
     if(page !== 'viewBook' ) {

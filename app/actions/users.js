@@ -50,13 +50,14 @@ export function updateSettings(settings) {
 }
 
 export function getUserChanges() {
+  console.log('User changes firing');
   return (dispatch, getState) => {
     const { client: { noLoad } } = getState();
     if(!noLoad){
       return makeUserRequest('get')
       .then((res) => {
         if(res.status === 200) {
-          dispatch(userChanges(res.data));
+          return dispatch(userChanges(res.data));
         }
       });
     }
