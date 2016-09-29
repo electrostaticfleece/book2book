@@ -77,7 +77,11 @@ class Home extends Component {
           </div>
           <div className={cx('heading')}>
             <h1>Explore New Worlds!</h1>
-            <p>Your next literary adventure is a trade away.</p>
+            <p className={cx('subHeader')}>Your next literary adventure awaits.</p>
+            <p className={cx('text')}>Book 2 Book is an application that allows users to trade books with each other. 
+            To get started, login with your existing Google account or <a target="_blank" href="https://accounts.google.com/SignUp?hl=en">create an account</a>. Once
+            you're logged in, you can add books, look for books that catch your interest, and propose trades with other users. You can browse currently available books 
+            by scrolling to the bottom of the home page</p>
           </div>
         </div>
         <div className={cx('bookView')}>
