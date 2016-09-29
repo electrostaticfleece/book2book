@@ -335,8 +335,7 @@ describe('Book Actions', () => {
         {
           type: types.DELETE_BOOK_REQUEST,
           payload: {
-            book: serverRes.books[0],
-            index: 0
+            book: serverRes.books[0]
           }
         }, {
           type: types.DELETE_BOOK_SUCCESS,
@@ -359,8 +358,7 @@ describe('Book Actions', () => {
         {
           type: types.DELETE_BOOK_REQUEST,
           payload: {
-            book: serverRes.books[0],
-            index: 0
+            book: serverRes.books[0]
           }
         }, {
           type: types.DELETE_BOOK_FAILURE,
