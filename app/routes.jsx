@@ -7,7 +7,7 @@ import Home from 'containers/Home';
 import App from 'containers/App';
 import Add from 'containers/Add';
 import Settings from 'containers/Settings';
-import MyTrades from 'containers/MyTrades';
+import MyTrades from 'containers/myTrades';
 
 /*
  * @param {Redux Store}
