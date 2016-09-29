@@ -147,13 +147,13 @@ export function changeBook(move) {
 //Will get all available books in the database or will limit the request to a set number of books
 
 export function getAvailableBooks(limit = 20, offset = 0) {
+  console.log('firing');
   return (dispatch) => {
     const config = {type: 'get', options: {}, api: '/books/' + (limit || '') + '/' + offset};
     const message = 'Unfortunately, we could not retrive any books from the database at this time.';
 
-    console.log('executing');
-    const success = createHandleRes(200, (res) => {console.log(res.data.books); return getAvailableBooksSuccess({data: res.data.books});});
-    const failure = () => { console.log('request failed'); return getAvailableBooksFailure({message})};
+    const success = createHandleRes(200, (res) => { return getAvailableBooksSuccess({data: res.data.books});});
+    const failure = () => { return getAvailableBooksFailure({message}); };
 
     return handleRequests(dispatch, getAvailableBooksRequest, config, success, failure);
   };
