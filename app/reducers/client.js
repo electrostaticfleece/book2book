@@ -18,7 +18,26 @@ const multiBook = (
   }
 };
 
+const noLoad = (
+  state = false,
+  action
+) => {
+  switch(action.type) {
+  case types.POST_BOOK_REQUEST:
+  case types.PROPOSE_TRADE_REQUEST:
+    return true;
+  case types.POST_BOOK_SUCCESS:
+  case types.POST_BOOK_FAILURE:
+  case types.PROPOSE_TRADE_SUCCESS:
+  case types.PROPOSE_TRADE_FAILURE:
+    return false;
+  default:
+    return state;
+  }
+};
+
 const clientReducer = combineReducers({
+  noLoad,
   multiBook
 });
 

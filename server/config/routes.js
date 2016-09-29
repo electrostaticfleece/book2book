@@ -16,6 +16,7 @@ export default (app) => {
   if(controllers && controllers.User){
     app.get('/logout', controllers.User.logOut, saveSession);
     app.put('/user', controllers.User.updateSettings);
+    app.get('/user', controllers.User.getUserUpdates);
   }
 
   if (passportConfig && passportConfig.google) {

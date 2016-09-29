@@ -99,9 +99,9 @@ export default function(Models){
         status: 'pending'
       }
     })
-    .then((count) => {
+    .then((instance) => {
 
-      if(count[0] !== 1 ) {
+      if(instance[0] !== 1) {
         throw new Error('There was an error while updating your status');
       } 
 
@@ -136,13 +136,14 @@ export default function(Models){
                 {altId: trade.requestedbook},
                 {altId: trade.decisionbook}
               ]
-            }
+            },
+            limit: 2
           })
           .then((books) => {
             return books.forEach((book) => {
               book.decrement('available', {by: 1})
               .then((book) => {
-                const userId = book.altId === trade.requestedBook ? trade.decisionby : trade.requestedby;
+                const userId = (book.altId === trade.requestedbook) ? trade.decisionby : trade.requestedby;
                 book.removeUser([userId]);
               });
             });

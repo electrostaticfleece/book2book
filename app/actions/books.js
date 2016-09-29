@@ -12,7 +12,6 @@ const googleConfig = {
   baseURL: 'https://www.googleapis.com', 
   timeout: 5000
 };
-const singleStatus = [''];
 const singleNames = [
   'getNewBookSuccess', 
   'getNextBook', 
@@ -29,14 +28,14 @@ const requestNames = [
   'getBook', 
   'deleteBook', 
   'postBook', 
-  'getAvailableBooks' 
+  'getAvailableBooks'
 ];
 const pairs = [{
   actionNames: requestNames, 
   statuses: requestStatuses
 } , {
   actionNames: singleNames,
-  statuses: singleStatus
+  statuses: ['']
 }];
 
 //AUXILIARY FUNCTIONS
@@ -117,8 +116,7 @@ export function getBook(startIndex = 0, newSearch = false) {
       const optimistic = () => getBookRequest(query);
       const success = createHandleRes(200, handleResponse);
       const failure = () => getBookFailure({message, query});
-
-      handleRequests(dispatch, optimistic, config, success, failure);
+      return handleRequests(dispatch, optimistic, config, success, failure);
     }
   };
 }
@@ -136,7 +134,7 @@ export function changeBook(move) {
 
       if(nextIndex < data.length && nextIndex >= 0) {
         const id = data[nextIndex].altId;
-        dispatch(getNextBook({index: nextIndex, id}));
+        return dispatch(getNextBook({index: nextIndex, id}));
       }
 
       if(nextIndex >= data.length && viewing.lastOfSet < totalItems) {
@@ -171,25 +169,23 @@ export function postBook() {
 
     const book = data[viewing.index];
     const message = 'Unfortunately we could not add your book because it\'s already in your collection or there was an error. Please try again';
-    const inCollection = books.some((userBook) => userBook.altId === book.altId);
+    const inCollection = books.some((userBook) => userBook.altId === viewing.id);
     const optimisticAction = inCollection ? postBookFailure(message) : postBookRequest(book);
     const config = {type: 'post', options: {data: book}};
 
     const optimistic = () => { browserHistory.push('/mybooks'); return optimisticAction; };
     const success = inCollection ? null : createHandleRes(200, () => postBookSuccess(book));
-    const failure = inCollection ? null : () => postBookFailure({message, book, index: getState().user.books.lastIndexOf(book)});
+    const failure = inCollection ? null : () =>  postBookFailure({message, book});
 
     return handleRequests(dispatch, optimistic, config, success, failure);
   };
 }
 
 export function deleteBook(book) {
-  return (dispatch, getState) => {
-    const { user: { books } } = getState();
+  return dispatch => {
 
     if(typeof book.altId === 'string') {
-      const bookIndex = books.lastIndexOf(book);
-      const optimisticData = {book, index: bookIndex};
+      const optimisticData = {book};
       const config = {type: 'delete', options: {data: book}};
       const message = 'Unfortunately, we could not delete your book. Please try again at a later time.';
 
@@ -212,7 +208,7 @@ export function changeViewToSingle(data) {
       resolve();
     });
 
-    changeState.then(() => {
+    return changeState.then(() => {
       browserHistory.push('/viewBook');
     })
     .catch(() => {

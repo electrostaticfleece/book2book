@@ -20,7 +20,7 @@ function getUserProps(req, need, defaultVal) {
 function formatTrades(trades) {
   return trades.map((trade) => {
     const data = trade.dataValues;
-    return {...data, updatedAt: data.updatedAt.toISOString(), createdAt: data.createdAt.toISOString()}
+    return {...data, updatedAt: data.updatedAt.toISOString(), createdAt: data.createdAt.toISOString()};
   });
 }
 
@@ -50,9 +50,6 @@ export default function render(req, res) {
       userInfo,
       authenticated,
       userId,
-      isWaiting: false,
-      message: '',
-      isLogin: true,
       books: usersBooks,
       trades: {
         existing: userTrades,
@@ -85,7 +82,6 @@ export default function render(req, res) {
    */
   match({routes, location: req.url}, (err, redirect, props) => {
     if (err) {
-      console.log(err);
       res.status(500).json(err);
     } else if (redirect) {
       res.redirect(302, redirect.pathname + redirect.search);
@@ -122,7 +118,6 @@ export default function render(req, res) {
         `);
       })
       .catch((err) => {
-        console.log(err);
         res.status(500).json(err);
       });
     } else {

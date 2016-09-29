@@ -1,6 +1,7 @@
 export default function(Models) {
   const User = Models.User;
   const Book = Models.Book;
+  const Trade = Models.Trade;
   const sequelize = Models.sequelize;
 
 
@@ -112,7 +113,29 @@ export default function(Models) {
     });
   }
 
+  function getUserUpdates(req,res) {
+
+    if(authenticated(req.user, res)) {
+      return null;
+    }
+
+    User.findById(req.user.id, {
+      include: [
+        Book, 
+        {model: Trade, include: [Book] } 
+      ],
+      order: [[Trade, 'createdAt', 'DESC']]
+    })
+    .then((user) => {
+      res.status(200).send({trades: user.Trades, books: user.Books});
+    })
+    .catch(() => {
+      res.status(500).send({message: 'Cannot get user data at this time'});
+    });
+  }
+
   return {
+    getUserUpdates,
     updateSettings,
     findById,
     findOne,

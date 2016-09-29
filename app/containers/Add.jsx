@@ -28,10 +28,10 @@ class Add extends Component {
   mapIcons(condition) {
     /* 
      * A condition is passed through to the mapIcons function for our onClick 
-     * event because we need the currentstate of the application. Otherwise, 
-     * react does not recognize that the status of our search request has changed. 
+     * event because we need the current state of the application. Otherwise, 
+     * react will use the curerent state where the function was defined. 
      *
-     * By injecting icons into the component allowing for greater control over properties. 
+     * Injecting icons into the component allows for greater control over their properties. 
      */
     const { changeBook, postBook } = this.props;
     const icons = [ {
@@ -50,7 +50,9 @@ class Add extends Component {
 
     return icons.map((icon, i) => {
       return (
-        <div className={cx('circle')} >
+        <div 
+          className={cx('circle')} 
+          key = {icon.title}>
           <i
             onClick = { icon.func }
             className = {cx(icon.classes)}

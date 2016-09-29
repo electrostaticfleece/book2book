@@ -16,7 +16,7 @@ class Home extends Component {
     this.state = {
       showBooks: 14,
       addToLength: 14,
-      reqLength: 100
+      reqLength: 50
     };
   }
 
@@ -67,7 +67,7 @@ class Home extends Component {
     };
   }
 
-  static need = [ () => { return getAvailableBooks(100, 0, true) } ]
+  static need = [ () => { return getAvailableBooks(50, 0) } ]
 
   render() {
     const { books: {search: {findBook: { data } } }, changeViewToSingle } = this.props

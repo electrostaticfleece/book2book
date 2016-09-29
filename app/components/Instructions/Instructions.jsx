@@ -134,7 +134,7 @@ class Instructions extends Component {
             { stage !== 2 ?
                 <button 
                   className={cx('button')} 
-                  onClick = { stage < 3 ? () => { this.changeStage(1); window.scrollTo(0, 0); } : proposeTrade}
+                  onClick = { stage < 3 ? () => { this.changeStage(1); window.scrollTo(0, 0); } : () => proposeTrade(new Date().toISOString()) }
                   >
                     { stage < 3 ? 'next' : 'submit' }
                 </button> :

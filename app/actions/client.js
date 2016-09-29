@@ -10,6 +10,13 @@ export function changeMultiBookWidth(data) {
 export function mountMultiBook(data) {
   return {
     type: types.MOUNT_MULTIBOOK,
-    paload: data
+    payload: data
+  };
+}
+
+export function noLoad(data) {
+  return {
+    type: types.NO_LOAD,
+    payload: data
   };
 }

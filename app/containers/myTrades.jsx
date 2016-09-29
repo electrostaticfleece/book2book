@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { changeStatus } from 'actions/trades';
+import { getUserChanges } from 'actions/users';
 import classNames from 'classnames/bind';
 import styles from 'css/pages/trades';
 import Trades from 'components/Trades';
@@ -16,6 +17,8 @@ class MyTrades extends Component {
     //Incase we come from a page where the scroll bar is positioned
     window.scrollTo(0, 0);
   }
+
+  static need = [ getUserChanges ]
 
   render() {
     const { user, changeStatus } = this.props;

@@ -2,6 +2,7 @@ import { polyfill } from 'es6-promise';
 import axios from 'axios';
 import * as types from 'types';
 import { createHandleRes, createRequestHandler } from 'actions/auxiliary';
+import { browserHistory } from 'react-router';
 
 
 polyfill();
@@ -22,22 +23,10 @@ function makeUserRequest(method, config, api = '/user') {
 
 const handleRequests = createRequestHandler(makeUserRequest);
 
-// Log Out Action Creators
-export function beginLogout() {
-  return { type: types.LOGOUT_USER};
-}
-
-export function logoutSuccess() {
-  return { type: types.LOGOUT_SUCCESS_USER };
-}
-
-export function logoutError() {
-  return { type: types.LOGOUT_ERROR_USER };
-}
-
-export function logOut() {
-  return dispatch => {
-    dispatch(beginLogout());
+export function userChanges(data) {
+  return {
+    type: types.USER_CHANGES,
+    payload: data
   };
 }
 
@@ -56,6 +45,20 @@ export function updateSettings(settings) {
     const success = createHandleRes(200, () => false);
     const failure = () => updateInfo(userInfo);
     
-    handleRequests(dispatch, optimistic, config, success, failure);
+    return handleRequests(dispatch, optimistic, config, success, failure);
+  };
+}
+
+export function getUserChanges() {
+  return (dispatch, getState) => {
+    const { client: { noLoad } } = getState();
+    if(!noLoad){
+      return makeUserRequest('get')
+      .then((res) => {
+        if(res.status === 200) {
+          dispatch(userChanges(res.data));
+        }
+      });
+    }
   };
 }

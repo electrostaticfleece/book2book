@@ -15,7 +15,7 @@ export function addBookQuery(data) {
 
 export function invalidSource(data) {
   return {
-    type: types.INVALID_SORUCE,
+    type: types.INVALID_SOURCE,
     payload: data
   };
 }

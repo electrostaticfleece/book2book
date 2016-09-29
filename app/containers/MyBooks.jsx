@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
 import styles from 'css/pages/myBooks';
+import { getUserChanges } from 'actions/users';
 import { changeViewToSingle, deleteBook } from 'actions/books';
 import MultiBook from 'components/MultiBook';
 
@@ -34,6 +35,8 @@ class MyBooks extends Component {
       classes: {view: true, icon: true}
     };
   }
+
+  static need = [ getUserChanges ]
 
   render() {
     const { user: { books } } = this.props;

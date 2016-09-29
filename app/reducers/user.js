@@ -1,72 +1,11 @@
 import * as types from 'types';
 import { combineReducers } from 'redux';
 
-const isLogin = (
-  state = true,
-  action
-) => {
-  switch (action.type) {
-  case types.TOGGLE_LOGIN_MODE:
-    return !state;
-  default:
-    return state;
-  }
-};
-
-const message = (
-  state = '',
-  action
-) => {
-  switch (action.type) {
-  case types.TOGGLE_LOGIN_MODE:
-  case types.MANUAL_LOGIN_USER:
-  case types.SIGNUP_USER:
-  case types.LOGOUT_USER:
-  case types.LOGIN_SUCCESS_USER:
-  case types.SIGNUP_SUCCESS_USER:
-    return '';
-  case types.LOGIN_ERROR_USER:
-  case types.SIGNUP_ERROR_USER:
-    return action.message;
-  default:
-    return state;
-  }
-};
-
-const isWaiting = (
-  state = false,
-  action
-) => {
-  switch (action.type) {
-  case types.MANUAL_LOGIN_USER:
-  case types.SIGNUP_USER:
-  case types.LOGOUT_USER:
-    return true;
-  case types.LOGIN_SUCCESS_USER:
-  case types.SIGNUP_SUCCESS_USER:
-  case types.LOGOUT_SUCCESS_USER:
-  case types.LOGIN_ERROR_USER:
-  case types.SIGNUP_ERROR_USER:
-  case types.LOGOUT_ERROR_USER:
-    return false;
-  default:
-    return state;
-  }
-};
-
 const authenticated = (
   state = false,
   action
 ) => {
   switch (action.type) {
-  case types.LOGIN_SUCCESS_USER:
-  case types.SIGNUP_SUCCESS_USER:
-  case types.LOGOUT_ERROR_USER:
-    return true;
-  case types.LOGIN_ERROR_USER:
-  case types.SIGNUP_ERROR_USER:
-  case types.LOGOUT_SUCCESS_USER:
-    return false;
   default:
     return state;
   }
@@ -81,9 +20,16 @@ const books = (
     return [...state, action.payload];
   case types.DELETE_BOOK_REQUEST:
   case types.POST_BOOK_FAILURE:
-    return state.filter((book) => book.altId !== action.payload.book.altId);
+    return state.filter((book) => {
+      if(action.payload.book) {
+        return book.altId !== action.payload.book.altId;
+      }
+      return true;
+    });
   case types.DELETE_BOOK_FAILURE:
     return [...state, action.payload.book];
+  case types.USER_CHANGES: 
+    return action.payload.books;
   case types.POST_BOOK_SUCCESS:
   default:
     return state;
@@ -108,7 +54,8 @@ const existing = (
 ) => {
   switch(action.type) {
   case types.GET_ALL_TRADES_SUCCESS:
-    return action.payload;
+  case types.USER_CHANGES:
+    return action.payload.trades ? action.payload.trades : action.payload;
   case types.PROPOSE_TRADE_SUCCESS:
     return [action.payload, ...state.slice(1)];
   case types.PROPOSE_TRADE_REQUEST:
@@ -157,6 +104,7 @@ const trades = (
     return {...state, potential: potential(state.potential, action)};
   case types.UPDATE_STATUS:
   case types.GET_ALL_TRADES_SUCCESS:
+  case types.USER_CHANGES: 
     return {...state, existing: existing(state.existing, action)};
   case types.PROPOSE_TRADE_SUCCESS:
   case types.PROPOSE_TRADE_REQUEST:
@@ -203,10 +151,7 @@ const userInfo = (
 const userReducer = combineReducers({
   userInfo,
   userId,
-  isLogin,
-  isWaiting,
   authenticated,
-  message,
   books,
   trades
 });

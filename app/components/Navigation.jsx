@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { logOut } from 'actions/users';
 import { resetView } from 'actions/books';
 import classNames from 'classnames/bind';
 import styles from 'css/components/navigation';
@@ -59,7 +58,7 @@ class Navigation extends Component {
   }
 
   render() {
-    const { user, logOut, resetView, location} = this.props;
+    const { user, resetView, location} = this.props;
     const auth = user.authenticated;
     const pathname = location.pathname;
     return (
@@ -68,7 +67,6 @@ class Navigation extends Component {
           {this.mapLinks(auth, pathname, {resetView})}
           <a 
             href={auth ? '/logout' : '/auth/google'} 
-            onClick = { auth ? logOut : null}
             className={cx('navLink')}
           >
             <li className={cx('linkName')}>{auth ? 'Logout' : 'Google Login'}</li>
@@ -86,4 +84,4 @@ function mapStateToProps({user, routing}) {
   };
 }
 
-export default connect(mapStateToProps, {logOut, resetView })(Navigation);
+export default connect(mapStateToProps, {resetView })(Navigation);

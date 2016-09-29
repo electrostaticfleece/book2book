@@ -2,6 +2,7 @@ import * as types from 'types';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
 import { polyfill } from 'es6-promise';
+import { deleteBookRequest } from 'actions/books';
 import { createHandleRes, createRequestHandler, createActionCreators } from 'actions/auxiliary';
 
 polyfill();
@@ -54,8 +55,9 @@ export const {
   getAllTradesFailure
 } = createActionCreators(pairs, {}, types);
 
-export function proposeTrade() {
+export function proposeTrade(time) {
   return (dispatch, getState) => {
+
     const { user: { trades: { potential }, userId } } = getState();
     const config = {type: 'post', options: {data: potential}};
     const success = createHandleRes(200, (res) => {
@@ -76,12 +78,12 @@ export function proposeTrade() {
         decisionbook: potential.userBook.altId,
         Books: [potential.requestedBook, potential.userBook],
         requestedby: userId,
-        createdAt: new Date().toISOString(),
+        createdAt: time,
         status: 'pending'
       }); 
     };
 
-    handleRequests(dispatch, optimistic, config, success, proposeTradeFailure);
+    return handleRequests(dispatch, optimistic, config, success, proposeTradeFailure);
   };
 }
 
@@ -93,10 +95,15 @@ export function changeStatus(trade, status) {
       const { tradeID } = trade;
       const optimistic = () => { return updateStatus({status, tradeID}); };
       const config = {type: 'put', options: {data: {status, tradeID, trade}}};
-      const success = createHandleRes(200, (res) => { return getAllTradesSuccess(res.data.trades) });
+      const success = createHandleRes(200, (res) => { 
+        if(status === 'accepted'){
+          dispatch(deleteBookRequest({book: {altId: trade.requestedbook}}));
+        } 
+        return getAllTradesSuccess(res.data.trades);
+      });
       const failure = () => { return updateStatus({status: 'pending', tradeID}); };
 
-      handleRequests(dispatch, optimistic, config, success, failure);
+      return handleRequests(dispatch, optimistic, config, success, failure);
     }
   };
 }

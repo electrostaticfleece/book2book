@@ -1,3 +1,7 @@
+import { polyfill } from 'es6-promise';
+
+polyfill();
+
 function underscoreLeft(string) {
   return '_' + string;
 }
@@ -42,7 +46,7 @@ export function createRequestHandler(requestFunc) {
         .then((res) => {
           const successAction = handleRes(res);
           if(successAction){
-            dispatch(successAction);
+            return dispatch(successAction);
           }
         })
         .catch((err) => {
