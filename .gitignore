@@ -3,4 +3,3 @@ node_modules
 compiled
 tmp/mocha-webpack
 .tmp
-.env
