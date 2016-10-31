@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
 import { getAvailableBooks, changeViewToSingle } from 'actions/books';
@@ -21,9 +21,10 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    const { getAvailableBooks } = this.props;
     //Incase we come from a page where the scroll bar is positioned
     window.scrollTo(0, 0);
-
+    getAvailableBooks(50, 0);
     window.addEventListener('scroll', this.getMoreBooks);
   }
 
@@ -34,16 +35,16 @@ class Home extends Component {
     const height = window.innerHeigh || document.documentElement.clientHeight|| document.body.clientHeight;
     const scrollTop = window.scrollTop || window.pageYOffset;
 
-      if(height + scrollTop === this.getDocHeight()){
-        const nextLength = showBooks + addToLength;
+    if(height + scrollTop === this.getDocHeight()){
+      const nextLength = showBooks + addToLength;
 
-        if(books.length < nextLength && books.length === reqLength ){
-          getAvailableBooks(books.legnth + reqlength);
-        }
-        if(books.length > showBooks - addToLength){
-          this.setState({showBooks: nextLength});
-        }
+      if(books.length < nextLength && books.length === reqLength ){
+        getAvailableBooks(books.legnth + reqLength);
       }
+      if(books.length > showBooks - addToLength){
+        this.setState({showBooks: nextLength});
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -60,17 +61,14 @@ class Home extends Component {
   }
 
   viewButton() {
-    const { changeViewToSingle } = this.props;
     return {
       func: () => {},
       classes: {view: true, icon: true}
     };
   }
 
-  static need = [ () => { return getAvailableBooks(50, 0) } ]
-
   render() {
-    const { books: {search: {findBook: { data } } }, changeViewToSingle } = this.props
+    const { books: {search: {findBook: { data } } }, changeViewToSingle } = this.props;
     const books = data || [];
     return (
       <div className={cx('home')}>
@@ -79,12 +77,16 @@ class Home extends Component {
           </div>
           <div className={cx('heading')}>
             <h1>Explore New Worlds!</h1>
-            <p>Your next literary adventure is a trade away.</p>
+            <p className={cx('subHeader')}>Your next literary adventure awaits.</p>
+            <p className={cx('text')}>Book 2 Book is an application that allows users to trade books with each other. 
+            To get started, login with your existing Google account or <a target="_blank" href="https://accounts.google.com/SignUp?hl=en">create an account</a>. Once
+            you're logged in, you can add books, look for books that catch your interest, and propose trades with other users. You can browse currently available books 
+            by scrolling to the bottom of the home page</p>
           </div>
         </div>
         <div className={cx('bookView')}>
           <MultiBook
-            books = {books.filter((book, i) => { return i < this.state.showBooks})}
+            books = {books.filter((book, i) => { return i < this.state.showBooks; })}
             icons ={[this.viewButton()]}
             bookSize = 'small'
             dimensions = {{width: 200, margin: 10}}
@@ -96,7 +98,7 @@ class Home extends Component {
       </div>
     );
   }
-};
+}
 
 function mapStateToProps({books, user}) {
   return {

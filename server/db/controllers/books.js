@@ -103,6 +103,7 @@ export default function(Models) {
       },
       order: [['updatedAt', 'DESC']]
     };
+    
     if(req.params.limit) {
       dbQuery.limit = req.params.limit;
     }

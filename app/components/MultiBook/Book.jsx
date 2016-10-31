@@ -63,7 +63,7 @@ class Book extends Component {
       >
         <div className={cx({bookWrap: true})}>
           <img 
-            src={book.image ? (bookSize === 'small' ? book.image.replace('zoom=2', 'zoom=1') : book.image) : galaxy} 
+            src={book.image ? (bookSize === 'small' ? book.image.replace('zoom=2', 'zoom=1').replace('http', 'https') : book.image) : galaxy} 
             className = {cx('bookImg')}
           />
           <div 

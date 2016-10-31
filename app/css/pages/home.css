@@ -14,14 +14,28 @@
 
 .heading {
   position: absolute;
-  top: 275px;
+  top: 145px;
   left: 55px;
   color: white;
+  padding-right: 20px;
 }
 
-.heading p {
+.heading .subHeader {
+  margin: 45px 0;
   color: white;
   font-size: 30px;
+}
+
+.text {
+  color: white;
+  max-width: 1100px;
+  font-size: 16px;
+  line-height: 2em;
+  padding-right: 20px;
+}
+
+.text a {
+  color: #F70C47;
 }
 
 .filter {
@@ -42,8 +56,26 @@
     font-size: 50px;
   }
 
-  .hero p {
+  .hero .subHeader {
     font-size: 20px;
   }
 }
 
+@media (max-width: 900px) {
+  .bookView {
+    margin-top: -100px;
+  }
+}
+
+@media (max-width: 500px) {
+  .text {
+    display: none;
+  }
+  .bookView {
+    margin-top: -200px;
+  }
+
+  .heading {
+    top: 225px;
+  }
+}
