@@ -41,7 +41,7 @@ class Home extends Component {
       const nextLength = showBooks + addToLength;
 
       if(books.length < nextLength && books.length === reqLength ){
-        getAvailableBooks(books.legnth + reqLength);
+        getAvailableBooks(books.length + reqLength);
       }
       if(books.length > showBooks - addToLength){
         this.setState({showBooks: nextLength});
