@@ -1,3 +1,5 @@
+const types = {}
+
 export const DISMISS_MESSAGE = 'DISMISS_MESSAGE';
 export const TYPING = 'TYPING';
 export const CLEAR_TYPING = 'CLEAR_TYPING';
