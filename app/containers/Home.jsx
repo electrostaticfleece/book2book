@@ -24,11 +24,9 @@ class Home extends Component {
     const { getAvailableBooks } = this.props;
     //Incase we come from a page where the scroll bar is positioned
     window.scrollTo(0, 0);
-<<<<<<< HEAD
-    getAvailableBooks(50, 0);
-=======
+
     getAvailableBooks(28, 0);
->>>>>>> master
+
     window.addEventListener('scroll', this.getMoreBooks);
   }
 
@@ -43,11 +41,7 @@ class Home extends Component {
       const nextLength = showBooks + addToLength;
 
       if(books.length < nextLength && books.length === reqLength ){
-<<<<<<< HEAD
         getAvailableBooks(books.legnth + reqLength);
-=======
-        getAvailableBooks(books.length + reqLength);
->>>>>>> master
       }
       if(books.length > showBooks - addToLength){
         this.setState({showBooks: nextLength});
