@@ -93,12 +93,11 @@ export default function(Models) {
 
   function updateSettings(req, res) {
     const { body: { data } } = req;
-
     if(authenticated(req.user, res)) {
       return null;
     }
 
-    User.update(data, {
+    return User.update(data, {
       where: {
         id: req.user.id
       }

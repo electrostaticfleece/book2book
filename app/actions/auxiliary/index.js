@@ -76,15 +76,18 @@ function createActionCreator(status, name, writeTo, types, namingFunc) {
  */
 
 export function createActionCreators(pairs, actions = {}, types) {
-  pairs.forEach((pair) => {
-    const {actionNames, statuses} = pair;
+
+  pairs.reduce((prev, next) => {
+    const {actionNames, statuses} = next;
 
     actionNames.forEach((name) => {
 
       statuses.forEach((status) => {
-        createActionCreator(status, name, actions, types, createTypeName);
+        createActionCreator(status, name, prev, types, createTypeName);
       });
     });
-  });
+
+    return prev;
+  }, Object.assign({}, actions));
   return actions;
 }

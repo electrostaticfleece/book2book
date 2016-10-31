@@ -56,7 +56,7 @@ export function getUserChanges() {
       return makeUserRequest('get')
       .then((res) => {
         if(res.status === 200) {
-          dispatch(userChanges(res.data));
+          return dispatch(userChanges(res.data));
         }
       });
     }

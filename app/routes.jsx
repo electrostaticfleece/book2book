@@ -7,7 +7,7 @@ import Home from 'containers/Home';
 import App from 'containers/App';
 import Add from 'containers/Add';
 import Settings from 'containers/Settings';
-import MyTrades from 'containers/MyTrades';
+import MyTrades from 'containers/myTrades';
 
 /*
  * @param {Redux Store}
@@ -32,16 +32,6 @@ export default (store) => {
       replace({
         pathname: '/',
         state: { nextPathname: nextState.location.pathname }
-      });
-    }
-    callback();
-  };
-
-  const redirectAuth = (nextState, replace, callback) => {
-    const { user: { authenticated }} = store.getState();
-    if (authenticated) {
-      replace({
-        pathname: '/'
       });
     }
     callback();
