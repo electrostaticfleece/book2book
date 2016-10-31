@@ -3,7 +3,7 @@
 }
 
 .hero {
-  background: url(images/sky-hero.jpg);
+  background: url(images/reading-Hero.jpeg);
   height:700px;
   background-size: cover;
   background-position: 100%;
@@ -28,14 +28,22 @@
 
 .text {
   color: white;
+<<<<<<< HEAD
   max-width: 1100px;
+=======
+  max-width: 800px;
+>>>>>>> master
   font-size: 16px;
   line-height: 2em;
   padding-right: 20px;
 }
 
 .text a {
+<<<<<<< HEAD
   color: #F70C47;
+=======
+  color: #01A9D5;
+>>>>>>> master
 }
 
 .filter {
@@ -51,6 +59,12 @@
   min-height: 400px;
 }
 
+@media (max-width: 900px) {
+  .bookView {
+    margin-top: -100px;
+  }
+}
+
 @media (max-width: 600px) {
   .hero h1 {
     font-size: 50px;
@@ -61,6 +75,7 @@
   }
 }
 
+<<<<<<< HEAD
 @media (max-width: 900px) {
   .bookView {
     margin-top: -100px;
@@ -77,5 +92,14 @@
 
   .heading {
     top: 225px;
+=======
+@media (max-width: 500px) {
+  .bookView {
+    margin-top: 100px;
+  }
+
+  .heading {
+    top: 100px;
+>>>>>>> master
   }
 }

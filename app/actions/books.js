@@ -99,6 +99,7 @@ export function getBook(startIndex = 0, newSearch = false) {
       const api = createAPIString(query, startIndex);
       const message = 'Unfortunately, your query failed. Please check your query and try again';
       const config = {type: 'get', options: googleConfig, api};
+      
       const handleResponse = (res) => {
         const {data: { items } } = res;
         const bookData = items.map((book) => {
@@ -147,6 +148,10 @@ export function changeBook(move) {
 //Will get all available books in the database or will limit the request to a set number of books
 
 export function getAvailableBooks(limit = 20, offset = 0) {
+<<<<<<< HEAD
+=======
+  console.log(limit, offset);
+>>>>>>> master
   return (dispatch) => {
     const config = {type: 'get', options: {}, api: '/books/' + (limit || '') + '/' + offset};
     const message = 'Unfortunately, we could not retrive any books from the database at this time.';
