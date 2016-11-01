@@ -81,7 +81,7 @@ export function createActionCreators(pairs, actions = {}, types) {
   return pairs.reduce((prev, next) => {
     const {actionNames, statuses} = next;
 
-    return actionNames.forEach((name) => {
+    actionNames.forEach((name) => {
       statuses.forEach((status) => {
         createActionCreator(status, name, prev, types, createTypeName);
       });
