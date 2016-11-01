@@ -59,6 +59,7 @@ export function createRequestHandler(requestFunc) {
 function createActionCreator(status, name, writeTo, types, namingFunc) {
   const statusName = name + status;
   const typeName = namingFunc(statusName);
+  
   writeTo[statusName] = function(data) {
     return {
       type: types[typeName],
@@ -80,8 +81,7 @@ export function createActionCreators(pairs, actions = {}, types) {
   return pairs.reduce((prev, next) => {
     const {actionNames, statuses} = next;
 
-    actionNames.forEach((name) => {
-
+    return actionNames.forEach((name) => {
       statuses.forEach((status) => {
         createActionCreator(status, name, prev, types, createTypeName);
       });
