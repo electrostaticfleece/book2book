@@ -1,7 +1,6 @@
 @import '../common/typography';
 
 .navigation {
-  background-color: rgba(0, 0, 0, 0.85);
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   margin: 0;
   position: fixed;
@@ -12,21 +11,126 @@
   height: 52px;
 }
 
+
 .linkList {
   display: flex;
-  justify-content: flex-end;
   list-style-type: none;
   margin: 0;
+  flex-direction: column;
+  background-color: black;
+  text-align: right;
+  padding: 0;
+  height: 100%;
+  transition: height 1s ease;
+  position: relative;
+  height: 100%;
+}
+
+.expanded .linkList {
+  height: 100vh;
+}
+
+
+.menuButton {
+  width: 50px;
+  min-height: 52px;
+  display: block;
+  margin: 0 10px 0 auto;
+  position: relative;
+}
+
+.menuButton:hover {
+  cursor: pointer;
+}
+
+.middleStripe, .middleStripe::before, .middleStripe::after {
+  background-color: white;
+  width: 25px;
+  height: 2px;
+  display: block;
+  position: absolute;
+  transition: transform 0.5s, background-color 0.5s;
+  content: ' ';
+}
+
+.middleStripe {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.middleStripe::before {
+  top: 6px;
+}
+
+.middleStripe::after {
+  top: -6px;
+}
+
+.expanded .middleStripe {
+  background-color: black;
+}
+
+.expanded .middleStripe::before {
+  transform: rotate(-45deg) translate(4px, -4px);
+}
+
+.expanded .middleStripe::after {
+  transform: rotate(45deg) translate(5px, 4px);
 }
 
 .navLink {
-  display: block;
-  padding: 15px;
+  padding: 15px 30px 15px 15px;
   height: 22px;
   text-decoration: none;
-  margin: 0 15px;
   position: relative;
+  text-align: center;
+  opacity: 0;
+  display: block;
+  transition: opacity 0.5s;
+  visibility: hidden;
 }
+
+.expanded .navLink {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 1s 0.25s;
+}
+
+.linkName {
+  color: white;
+  font-family: var(--headingFont);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.navLink:hover .linkName {
+  color: #01A9D5;
+}
+
+@media (min-width: 610px){
+  .menuButton {
+    display: none;
+  }
+
+  .linkList {
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-right: 15px;
+  }
+
+  .navLink {
+    opacity: 1;
+    padding: 15px 20px;
+    visibility: visible;
+  }
+
+  .expanded .linkList {
+    height: 100%;
+  }
+}
+
+/*
 
 .navLink::after {
   content: '';
@@ -44,13 +148,8 @@
   width: 100%;
 }
 
-.linkName {
-  color: white;
-  font-family: var(--headingFont);
-  font-weight: bold;
-  white-space: nowrap;
-}
-
 .navLink:hover .linkName, .selected .linkName {
   color: #01A9D5;
 }
+
+*/

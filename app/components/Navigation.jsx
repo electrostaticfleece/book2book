@@ -10,12 +10,22 @@ const cx = classNames.bind(styles);
 class Navigation extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      expanded: false
+    };
     this.filterLinks = this.filterLinks.bind(this);
     this.mapLinks = this.mapLinks.bind(this);
+    this.setExpanded = this.setExpanded.bind(this);
   }
 
   filterLinks(links, auth) {
     return auth ? links : links.filter(link => !link.authRequired);
+  }
+
+  setExpanded(){
+    this.setState((state) => {
+      return {expanded: !state.expanded};
+    });
   }
 
   mapLinks(auth, selected, actions) {
@@ -48,13 +58,28 @@ class Navigation extends Component {
         <Link 
           key={name} 
           to={href} 
-          className={cx({navLink: true, selected: selected === href})}
-          onClick = { onClick || null }
+          className={cx({
+            navLink: true, 
+            selected: selected === href
+          })}
+          onClick = { ()=> { 
+            this.setState({expanded: false});
+            if(onClick){
+              onClick();
+            }
+          } }
         >
           <li className={cx({linkName: true})}>{name}</li>
         </Link>
       );
-    });
+    }).concat(
+        <a 
+          href={auth ? '/logout' : '/auth/google'} 
+          className={cx('navLink')}
+        >
+          <li className={cx('linkName')}>{auth ? 'Logout' : 'Google Login'}</li>
+        </a>
+    );
   }
 
   render() {
@@ -62,15 +87,15 @@ class Navigation extends Component {
     const auth = user.authenticated;
     const pathname = location.pathname;
     return (
-      <nav className={cx('navigation')}>
+      <nav className={cx({navigation: true, expanded: this.state.expanded})}>
         <ul className={cx('linkList')}>
-          {this.mapLinks(auth, pathname, {resetView})}
-          <a 
-            href={auth ? '/logout' : '/auth/google'} 
-            className={cx('navLink')}
+          <div
+            className={cx({menuButton: true})}
+            onClick={this.setExpanded}
           >
-            <li className={cx('linkName')}>{auth ? 'Logout' : 'Google Login'}</li>
-          </a>
+            <span className={cx({middleStripe: true})}></span>
+          </div>
+          {this.mapLinks(auth, pathname, {resetView})}
         </ul>
       </nav>
     );
