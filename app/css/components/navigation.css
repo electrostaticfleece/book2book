@@ -21,13 +21,13 @@
   text-align: right;
   padding: 0;
   height: 100%;
-  transition: height 1s ease;
+  transition: height 0.75s ease;
   position: relative;
   height: 100%;
 }
 
 .expanded .linkList {
-  height: 100vh;
+  height: 150vh;
 }
 
 

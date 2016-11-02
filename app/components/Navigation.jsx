@@ -73,7 +73,8 @@ class Navigation extends Component {
         </Link>
       );
     }).concat(
-        <a 
+        <a
+          key={'Logout'}
           href={auth ? '/logout' : '/auth/google'} 
           className={cx('navLink')}
         >
