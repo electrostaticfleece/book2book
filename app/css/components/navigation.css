@@ -105,7 +105,7 @@
 }
 
 .navLink:hover .linkName {
-  color: #01A9D5;
+  color: #01A9D5;;
 }
 
 @media (min-width: 610px){
@@ -128,28 +128,24 @@
   .expanded .linkList {
     height: 100%;
   }
+
+  .navLink:hover .linkName, .selected .linkName {
+    color: #01A9D5;
+  }
+
+  .navLink::after {
+    content: '';
+    left: 0;
+    bottom: 0;
+    display: block;
+    position: absolute;
+    height: 3px;
+    background-color: #01A9D5;
+    width: 0%;
+    transition: width 0.25s;
+  }
+
+  .navLink:hover::after {
+    width: 100%;
+  }
 }
-
-/*
-
-.navLink::after {
-  content: '';
-  left: 0;
-  bottom: 0;
-  display: block;
-  position: absolute;
-  height: 3px;
-  background-color: #01A9D5;
-  width: 0%;
-  transition: width 0.25s;
-}
-
-.navLink:hover::after {
-  width: 100%;
-}
-
-.navLink:hover .linkName, .selected .linkName {
-  color: #01A9D5;
-}
-
-*/
